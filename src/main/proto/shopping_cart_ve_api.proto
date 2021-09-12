@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "akkaserverless/annotations.proto";
+
+package cartve; // <==== for Value Entity API
+
+message AddLineItem {
+  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string customer_id = 2;
+  string product_id = 3;
+  string name = 4;
+  int32 quantity = 5;
+}
+
+message ChangeLineItemQuantity {
+  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string product_id = 2;
+  int32 quantity = 3;
+}
+
+message RemoveLineItem {
+  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string product_id = 2;
+}
+
+message CheckoutShoppingCart {
+  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message GetShoppingCart {
+  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message RemoveShoppingCart {
+  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+}
+
+message LineItem {
+  string product_id = 1;
+  string name = 2;
+  int32 quantity = 3;
+}
+
+message Cart {
+  string customer_id = 1;
+  bool checked_out = 2;
+  bool deleted = 3;
+  repeated LineItem items = 4;
+}
+
+service CartService {
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_ENTITY
+    component: ".domain.ShoppingCartVe" // <==== for Value Entity API
+  };
+
+  rpc AddItem(AddLineItem) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/ve/cart/{cart_id}/items/add"
+      body: "*"
+    };
+  }
+
+  rpc ChangeItem(ChangeLineItemQuantity) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/ve/cart/{cart_id}/items/{product_id}/change"
+      body: "*"
+    };
+  }
+
+  rpc RemoveItem(RemoveLineItem) returns (google.protobuf.Empty) {
+    option (google.api.http).put = "/ve/cart/{cart_id}/items/{product_id}/remove";
+  }
+
+  rpc CheckoutCart(CheckoutShoppingCart) returns (google.protobuf.Empty) {
+    option (google.api.http).put = "/ve/cart/{cart_id}/checkout";
+  }
+
+  rpc GetCart(GetShoppingCart) returns (Cart) {
+    option (google.api.http) = {
+      get: "/ve/carts/{cart_id}"
+      additional_bindings: {
+        get: "/ve/carts/{cart_id}/items"
+        response_body: "items"
+      }
+    };
+  }
+
+  rpc RemoveCart (RemoveShoppingCart) returns (google.protobuf.Empty) {
+    option (google.api.http).post = "/ve/carts/{cart_id}/remove";
+  }
+}

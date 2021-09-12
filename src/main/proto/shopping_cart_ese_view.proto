@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package cartese.view;
+
+import "google/api/annotations.proto";
+import "akkaserverless/annotations.proto";
+import "shopping_cart_ese_domain.proto";
+
+service OrdersByCustomerEseView {
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_VIEW
+  };
+
+  rpc UpdateItemAdded(domain.ItemAdded) returns (domain.Cart) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "cart_ese"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "cart_ese"
+      transform_updates: true
+    };
+  }
+
+  rpc UpdateItemChangedQuantity(domain.ItemChangedQuantity) returns (domain.Cart) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "cart_ese"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "cart_ese"
+      transform_updates: true
+    };
+  }
+
+  rpc UpdateItemRemoved(domain.ItemRemoved) returns (domain.Cart) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "cart_ese"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "cart_ese"
+      transform_updates: true
+    };
+  }
+
+  rpc UpdateCheckedOut(domain.CheckedOut) returns (domain.Cart) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "cart_ese"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "cart_ese"
+      transform_updates: true
+    };
+  }
+
+  rpc UpdateCartRemoved(domain.CartRemoved) returns (domain.Cart) {
+    option (akkaserverless.method).eventing.in = {
+      event_sourced_entity: "cart_ese"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "cart_ese"
+      transform_updates: true
+    };
+  }
+
+  rpc GetOrdersByCustomer(GetOrdersByCustomerRequest) returns (CustomerOrdersResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS orders FROM cart_ese WHERE customer_id = :customer_id"
+    };
+    option (google.api.http) = {
+      get: "/ese/orders"
+    };
+  }
+}
+
+message GetOrdersByCustomerRequest {
+  string customer_id = 1;
+}
+
+message CustomerOrdersResponse {
+  repeated domain.Cart orders = 1;
+}

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package cartve.domain;
+
+import "akkaserverless/annotations.proto";
+
+option (akkaserverless.file).value_entity = {
+  name: "ShoppingCartVe"
+  entity_type: "cart_ve"
+  state: "Cart"
+};
+
+message ItemAdded {
+  LineItem item = 1;
+}
+
+message ItemChangedQuantity {
+  LineItem item = 1;
+}
+
+message ItemRemoved {
+  string product_id = 1;
+}
+
+message CheckedOut {
+  int64 checked_out_timestamp = 1;
+}
+
+message Cart {
+  string customer_id = 1;
+  string cart_id = 2;
+  bool checked_out = 3;
+  bool deleted = 4;
+  repeated LineItem items = 5;
+}
+
+message LineItem {
+  string product_id = 1;
+  string name = 2;
+  int32 quantity = 3;
+}

@@ -1,0 +1,56 @@
+
+### For use with VSCode Rest Client extension
+
+@hostname = restless-shape-0499.us-east1.akkaserverless.app
+@customerId = customer-1
+@cartId = cart-1
+@productId = product-5
+@productName = product name 5
+@quantity = 55
+
+### cartve.CartService.AddItem
+
+curl -XPOST -d '{
+  "cart_id": "{{cartId}}",
+  "customer_id": "{{customerId}}",
+  "product_id": "{{productId}}",
+  "name": "product name 1",
+  "quantity": {{quantity}}
+}' https://{{hostname}}/ve/cart/{{cartId}}/items/add -H "Content-Type: application/json"
+
+### cartve.CartService.ChangeItem
+
+curl -XPUT -d '{
+  "cart_id": "{{cartId}}",
+  "product_id": "{{productId}}",
+  "quantity": {{quantity}}
+}' https://{{hostname}}/ve/cart/{{cartId}}/items/{{productId}}/change -H "Content-Type: application/json"
+
+### cartve.CartService.CheckoutCart
+
+curl -XPUT -d '{
+  "cart_id": "{{cartId}}"
+}' https://{{hostname}}/ve/cart/{{cartId}}/checkout -H "Content-Type: application/json"
+
+### cartve.CartService.GetCart
+
+curl -XGET -d '{
+  "cart_id": "{{cartId}}"
+}' https://{{hostname}}/ve/carts/{{cartId}} -H "Content-Type: application/json"
+
+### cartve.CartService.RemoveCart
+
+curl -XPOST -d '{
+  "cart_id": "{{cartId}}"
+}' https://{{hostname}}/ve/carts/{{cartId}}/remove -H "Content-Type: application/json"
+
+### cartve.CartService.RemoveItem
+
+curl -XPUT -d '{
+  "cart_id": "{{cartId}}",
+  "product_id": "{{productId}}"
+}' https://{{hostname}}/ve/cart/{{cartId}}/items/{{productId}}/remove -H "Content-Type: application/json"
+
+### cartve.CartService.RemoveItem
+
+curl -XGET "https://{{hostname}}/ve/orders?customer_id={{customerId}}"

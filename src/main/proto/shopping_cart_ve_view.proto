@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package cartve.view;
+
+import "google/api/annotations.proto";
+import "akkaserverless/annotations.proto";
+import "shopping_cart_ve_domain.proto";
+
+service OrdersByCustomerVeView {
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_VIEW
+  };
+
+  rpc UpdateCustomerOrders(domain.Cart) returns (domain.Cart) {
+    option (akkaserverless.method).eventing.in = {
+      value_entity: "cart_ve"
+    };
+    option (akkaserverless.method).view.update = {
+      table: "cart_ve"
+    };
+  }
+
+  rpc GetOrdersByCustomer(GetOrdersByCustomerRequest) returns (CustomerOrdersResponse) {
+    option (akkaserverless.method).view.query = {
+      query: "SELECT * AS orders FROM cart_ve WHERE customer_id = :customer_id"
+    };
+    option (google.api.http) = {
+      get: "/ve/orders"
+    };
+  }
+}
+
+message GetOrdersByCustomerRequest {
+  string customer_id = 1;
+}
+
+message CustomerOrdersResponse {
+  repeated domain.Cart orders = 2;
+}
