@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package cartese.action.in;
+
+import "akkaserverless/annotations.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option java_outer_classname = "ShoppingCartEseActionTopicIn";
+
+message AddLineItem {
+  string cart_id = 1;
+  string customer_id = 2;
+  string product_id = 3;
+  string name = 4;
+  int32 quantity = 5;
+}
+
+message ChangeLineItemQuantity {
+  string cart_id = 1;
+  string product_id = 2;
+  int32 quantity = 3;
+}
+
+message RemoveLineItem {
+  string cart_id = 1;
+  string product_id = 2;
+}
+
+message CheckoutShoppingCart {
+  string cart_id = 1;
+}
+
+message RemoveShoppingCart {
+  string cart_id = 1;
+}
+
+service ShoppingCartEseTopicIn {
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_ACTION
+  };
+
+  rpc AddItem(AddLineItem) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      topic: "ese-shopping-cart"
+    };
+}
+
+  rpc ChangeItem(ChangeLineItemQuantity) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      topic: "ese-shopping-cart"
+    };
+  }
+
+  rpc RemoveItem(RemoveLineItem) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      topic: "ese-shopping-cart"
+    };
+  }
+
+  rpc CheckoutCart(CheckoutShoppingCart) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      topic: "ese-shopping-cart"
+    };
+  }
+
+  rpc RemoveCart (RemoveShoppingCart) returns (google.protobuf.Empty) {
+    option (akkaserverless.method).eventing.in = {
+      topic: "ese-shopping-cart"
+    };
+  }
+}
+

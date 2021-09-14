@@ -1,12 +1,11 @@
 syntax = "proto3";
 
-package cartese.action;
+package cartese.action.out;
 
 import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/empty.proto";
 
-option java_outer_classname = "ShoppingCartEseAction";
+option java_outer_classname = "ShoppingCartEseActionTopicOut";
 
 message AddLineItem {
   string cart_id = 1;
@@ -35,12 +34,12 @@ message RemoveShoppingCart {
   string cart_id = 1;
 }
 
-service ShoppingCartEseToTopic {
+service ShoppingCartEseTopicOut {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_ACTION
   };
 
-  rpc AddItem(AddLineItem) returns (google.protobuf.Empty) {
+  rpc AddItem(AddLineItem) returns (AddLineItem) {
     option (google.api.http) = {
       post: "/ese/cart/{cart_id}/items/add"
       body: "*"
@@ -50,7 +49,7 @@ service ShoppingCartEseToTopic {
     };
 }
 
-  rpc ChangeItem(ChangeLineItemQuantity) returns (google.protobuf.Empty) {
+  rpc ChangeItem(ChangeLineItemQuantity) returns (ChangeLineItemQuantity) {
     option (google.api.http) = {
       put: "/ese/cart/{cart_id}/items/{product_id}/change"
       body: "*"
@@ -60,21 +59,21 @@ service ShoppingCartEseToTopic {
     };
   }
 
-  rpc RemoveItem(RemoveLineItem) returns (google.protobuf.Empty) {
+  rpc RemoveItem(RemoveLineItem) returns (RemoveLineItem) {
     option (google.api.http).put = "/ese/cart/{cart_id}/items/{product_id}/remove";
     option (akkaserverless.method).eventing.out = {
       topic: "ese-shopping-cart"
     };
   }
 
-  rpc CheckoutCart(CheckoutShoppingCart) returns (google.protobuf.Empty) {
+  rpc CheckoutCart(CheckoutShoppingCart) returns (CheckoutShoppingCart) {
     option (google.api.http).put = "/ese/cart/{cart_id}/checkout";
     option (akkaserverless.method).eventing.out = {
       topic: "ese-shopping-cart"
     };
   }
 
-  rpc RemoveCart (RemoveShoppingCart) returns (google.protobuf.Empty) {
+  rpc RemoveCart (RemoveShoppingCart) returns (RemoveShoppingCart) {
     option (google.api.http).put = "/ese/carts/{cart_id}/remove";
     option (akkaserverless.method).eventing.out = {
       topic: "ese-shopping-cart"

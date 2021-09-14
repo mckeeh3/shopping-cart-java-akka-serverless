@@ -3,39 +3,39 @@
  * You are free to make changes to this file.
  */
 
-package cartese.action;
+package cartese.action.in;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Empty;
 
 /** An action. */
-public class ShoppingCartEseToTopicAction extends AbstractShoppingCartEseToTopicAction {
+public class ShoppingCartEseTopicInAction extends AbstractShoppingCartEseTopicInAction {
 
-  public ShoppingCartEseToTopicAction(ActionCreationContext creationContext) {}
+  public ShoppingCartEseTopicInAction(ActionCreationContext creationContext) {}
 
   /** Handler for "AddItem". */
   @Override
-  public Effect<Empty> addItem(ShoppingCartEseAction.AddLineItem addLineItem) {
+  public Effect<Empty> addItem(ShoppingCartEseActionTopicIn.AddLineItem addLineItem) {
     throw new RuntimeException("The command handler for `AddItem` is not implemented, yet");
   }
   /** Handler for "ChangeItem". */
   @Override
-  public Effect<Empty> changeItem(ShoppingCartEseAction.ChangeLineItemQuantity changeLineItemQuantity) {
+  public Effect<Empty> changeItem(ShoppingCartEseActionTopicIn.ChangeLineItemQuantity changeLineItemQuantity) {
     throw new RuntimeException("The command handler for `ChangeItem` is not implemented, yet");
   }
   /** Handler for "RemoveItem". */
   @Override
-  public Effect<Empty> removeItem(ShoppingCartEseAction.RemoveLineItem removeLineItem) {
+  public Effect<Empty> removeItem(ShoppingCartEseActionTopicIn.RemoveLineItem removeLineItem) {
     throw new RuntimeException("The command handler for `RemoveItem` is not implemented, yet");
   }
   /** Handler for "CheckoutCart". */
   @Override
-  public Effect<Empty> checkoutCart(ShoppingCartEseAction.CheckoutShoppingCart checkoutShoppingCart) {
+  public Effect<Empty> checkoutCart(ShoppingCartEseActionTopicIn.CheckoutShoppingCart checkoutShoppingCart) {
     throw new RuntimeException("The command handler for `CheckoutCart` is not implemented, yet");
   }
   /** Handler for "RemoveCart". */
   @Override
-  public Effect<Empty> removeCart(ShoppingCartEseAction.RemoveShoppingCart removeShoppingCart) {
+  public Effect<Empty> removeCart(ShoppingCartEseActionTopicIn.RemoveShoppingCart removeShoppingCart) {
     throw new RuntimeException("The command handler for `RemoveCart` is not implemented, yet");
   }
 }
