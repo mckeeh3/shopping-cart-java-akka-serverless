@@ -2,13 +2,13 @@
  * As long as this file exists it will not be re-generated.
  * You are free to make changes to this file.
  */
-package cartese.domain;
+package cartese.entity;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import cartese.ShoppingCartEseApi;
+import cartese.api.ShoppingCartEseApi;
 
 public class ShoppingCartEseTest {
   @Test

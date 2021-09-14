@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package cartve.action;
+
+import "akkaserverless/annotations.proto";
+import "shopping_cart_ve_domain.proto";
+
+service ShoppingCartTopicToEse {
+  option (akkaserverless.service) = {
+    type: SERVICE_TYPE_ACTION
+  };
+}

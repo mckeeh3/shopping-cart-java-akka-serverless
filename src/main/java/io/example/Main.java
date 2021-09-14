@@ -8,9 +8,11 @@ package io.example;
 import com.akkaserverless.javasdk.AkkaServerless;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cartese.domain.ShoppingCartEse;
+import cartese.action.ShoppingCartEseToTopicAction;
+import cartese.entity.ShoppingCartEse;
 import cartese.view.OrdersByCustomerEseViewImplView;
-import cartve.domain.ShoppingCartVe;
+import cartve.action.ShoppingCartVeToTopicAction;
+import cartve.entity.ShoppingCartVe;
 import cartve.view.OrdersByCustomerVeViewImplView;
 
 public final class Main {
@@ -25,8 +27,10 @@ public final class Main {
     return AkkaServerlessFactory.withComponents(
       ShoppingCartEse::new,
       ShoppingCartVe::new,
-      OrdersByCustomerEseViewImplView::new,
-      OrdersByCustomerVeViewImplView::new);
+      ShoppingCartEseToTopicAction::new,
+      ShoppingCartVeToTopicAction::new,
+      OrdersByCustomerVeViewImplView::new,
+      OrdersByCustomerEseViewImplView::new);
   }
 
   public static void main(String[] args) throws Exception {

@@ -2,7 +2,7 @@
  * As long as this file exists it will not be re-generated.
  * You are free to make changes to this file.
  */
-package cartese.domain;
+package cartese.entity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,18 +12,19 @@ import java.util.stream.Collectors;
 import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 
-import cartese.ShoppingCartEseApi;
-import cartese.ShoppingCartEseApi.AddLineItem;
-import cartese.ShoppingCartEseApi.ChangeLineItemQuantity;
-import cartese.ShoppingCartEseApi.CheckoutShoppingCart;
-import cartese.ShoppingCartEseApi.RemoveLineItem;
-import cartese.ShoppingCartEseApi.RemoveShoppingCart;
-import cartese.domain.ShoppingCartEseDomain.Cart;
-import cartese.domain.ShoppingCartEseDomain.CartRemoved;
-import cartese.domain.ShoppingCartEseDomain.CheckedOut;
-import cartese.domain.ShoppingCartEseDomain.ItemAdded;
-import cartese.domain.ShoppingCartEseDomain.ItemChangedQuantity;
-import cartese.domain.ShoppingCartEseDomain.ItemRemoved;
+import cartese.api.ShoppingCartEseApi;
+import cartese.api.ShoppingCartEseApi.AddLineItem;
+import cartese.api.ShoppingCartEseApi.ChangeLineItemQuantity;
+import cartese.api.ShoppingCartEseApi.CheckoutShoppingCart;
+import cartese.api.ShoppingCartEseApi.RemoveLineItem;
+import cartese.api.ShoppingCartEseApi.RemoveShoppingCart;
+import cartese.entity.ShoppingCartEseEntity;
+import cartese.entity.ShoppingCartEseEntity.Cart;
+import cartese.entity.ShoppingCartEseEntity.CartRemoved;
+import cartese.entity.ShoppingCartEseEntity.CheckedOut;
+import cartese.entity.ShoppingCartEseEntity.ItemAdded;
+import cartese.entity.ShoppingCartEseEntity.ItemChangedQuantity;
+import cartese.entity.ShoppingCartEseEntity.ItemRemoved;
 
 public class ShoppingCartEse extends AbstractShoppingCartEse {
   private final String entityId;
@@ -33,45 +34,45 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   @Override
-  public ShoppingCartEseDomain.Cart emptyState() {
-    return ShoppingCartEseDomain.Cart
+  public ShoppingCartEseEntity.Cart emptyState() {
+    return ShoppingCartEseEntity.Cart
         .newBuilder()
         .setCartId(entityId)
         .build();
   }
 
   @Override
-  public Effect<Empty> addItem(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseApi.AddLineItem command) {
+  public Effect<Empty> addItem(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseApi.AddLineItem command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
   @Override
-  public Effect<Empty> changeItem(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseApi.ChangeLineItemQuantity command) {
+  public Effect<Empty> changeItem(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseApi.ChangeLineItemQuantity command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
   @Override
-  public Effect<Empty> removeItem(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseApi.RemoveLineItem command) {
+  public Effect<Empty> removeItem(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseApi.RemoveLineItem command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
   @Override
-  public Effect<Empty> checkoutCart(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseApi.CheckoutShoppingCart command) {
+  public Effect<Empty> checkoutCart(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseApi.CheckoutShoppingCart command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
   @Override
-  public Effect<ShoppingCartEseApi.Cart> getCart(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseApi.GetShoppingCart command) {
+  public Effect<ShoppingCartEseApi.Cart> getCart(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseApi.GetShoppingCart command) {
     return handle(currentState);
   }
 
   @Override
-  public Effect<Empty> removeCart(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseApi.RemoveShoppingCart command) {
+  public Effect<Empty> removeCart(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseApi.RemoveShoppingCart command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
   @Override
-  public ShoppingCartEseDomain.Cart itemAdded(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseDomain.ItemAdded event) {
+  public ShoppingCartEseEntity.Cart itemAdded(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseEntity.ItemAdded event) {
     return ShoppingCart
         .toShoppingCart(currentState)
         .handle(event)
@@ -79,7 +80,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   @Override
-  public ShoppingCartEseDomain.Cart itemChangedQuantity(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseDomain.ItemChangedQuantity event) {
+  public ShoppingCartEseEntity.Cart itemChangedQuantity(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseEntity.ItemChangedQuantity event) {
     return ShoppingCart
         .toShoppingCart(currentState)
         .handle(event)
@@ -87,7 +88,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   @Override
-  public ShoppingCartEseDomain.Cart itemRemoved(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseDomain.ItemRemoved event) {
+  public ShoppingCartEseEntity.Cart itemRemoved(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseEntity.ItemRemoved event) {
     return ShoppingCart
         .toShoppingCart(currentState)
         .handle(event)
@@ -95,7 +96,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   @Override
-  public ShoppingCartEseDomain.Cart checkedOut(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseDomain.CheckedOut event) {
+  public ShoppingCartEseEntity.Cart checkedOut(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseEntity.CheckedOut event) {
     return ShoppingCart
         .toShoppingCart(currentState)
         .handle(event)
@@ -103,7 +104,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   @Override
-  public ShoppingCartEseDomain.Cart cartRemoved(ShoppingCartEseDomain.Cart currentState, ShoppingCartEseDomain.CartRemoved event) {
+  public ShoppingCartEseEntity.Cart cartRemoved(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseEntity.CartRemoved event) {
     return ShoppingCart
         .toShoppingCart(currentState)
         .handle(event)
@@ -180,13 +181,13 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   private Effect<Empty> handle(Cart currentState, AddLineItem command) {
-    var lineItem = ShoppingCartEseDomain.LineItem
+    var lineItem = ShoppingCartEseEntity.LineItem
         .newBuilder()
         .setProductId(command.getProductId())
         .setName(command.getName())
         .setQuantity(command.getQuantity())
         .build();
-    var event = ShoppingCartEseDomain.ItemAdded
+    var event = ShoppingCartEseEntity.ItemAdded
         .newBuilder()
         .setCartId(command.getCartId())
         .setCustomerId(command.getCustomerId())
@@ -199,7 +200,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   private Effect<Empty> handle(Cart currentState, ChangeLineItemQuantity command) {
-    var event = ShoppingCartEseDomain.ItemChangedQuantity
+    var event = ShoppingCartEseEntity.ItemChangedQuantity
         .newBuilder()
         .setProductId(command.getProductId())
         .setQuantity(command.getQuantity())
@@ -211,7 +212,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   private Effect<Empty> handle(Cart currentState, RemoveLineItem command) {
-    var event = ShoppingCartEseDomain.ItemRemoved
+    var event = ShoppingCartEseEntity.ItemRemoved
         .newBuilder()
         .setProductId(command.getProductId())
         .build();
@@ -222,7 +223,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   private Effect<Empty> handle(Cart currentState, CheckoutShoppingCart command) {
-    var event = ShoppingCartEseDomain.CheckedOut
+    var event = ShoppingCartEseEntity.CheckedOut
         .newBuilder()
         .build();
 
@@ -236,7 +237,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   private Effect<Empty> handle(Cart currentState, RemoveShoppingCart command) {
-    var event = ShoppingCartEseDomain.CartRemoved
+    var event = ShoppingCartEseEntity.CartRemoved
         .newBuilder()
         .build();
 
@@ -263,7 +264,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
         this.quantity = quantity;
       }
 
-      static LineItem toLineItem(ShoppingCartEseDomain.LineItem item) {
+      static LineItem toLineItem(ShoppingCartEseEntity.LineItem item) {
         return new LineItem(item.getProductId(), item.getName(), item.getQuantity());
       }
     }
@@ -305,15 +306,15 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
       return shoppingCart;
     }
 
-    ShoppingCartEseDomain.Cart toState() {
-      var lineItems = items.values().stream().map(item -> ShoppingCartEseDomain.LineItem
+    ShoppingCartEseEntity.Cart toState() {
+      var lineItems = items.values().stream().map(item -> ShoppingCartEseEntity.LineItem
           .newBuilder()
           .setProductId(item.productId)
           .setName(item.name)
           .setQuantity(item.quantity)
           .build())
           .collect(Collectors.toList());
-      return ShoppingCartEseDomain.Cart
+      return ShoppingCartEseEntity.Cart
           .newBuilder()
           .setCartId(cartId)
           .setCustomerId(customerId)

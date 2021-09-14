@@ -4,7 +4,7 @@
  */
 package cartve.view;
 
-import cartve.domain.ShoppingCartVeDomain;
+import cartve.entity.ShoppingCartVeEntity;
 import com.akkaserverless.javasdk.view.ViewContext;
 
 public class OrdersByCustomerVeViewImplView extends AbstractOrdersByCustomerVeViewImplView {

@@ -2,7 +2,7 @@
  * As long as this file exists it will not be re-generated.
  * You are free to make changes to this file.
  */
-package cartve.domain;
+package cartve.entity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -12,7 +12,7 @@ import com.google.protobuf.Empty;
 
 import org.junit.Test;
 
-import cartve.ShoppingCartVeApi;
+import cartve.api.ShoppingCartVeApi;
 
 public class ShoppingCartVeTest {
   @Test

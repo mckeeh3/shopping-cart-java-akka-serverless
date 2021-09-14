@@ -4,14 +4,16 @@ package cartese.view;
 
 import "google/api/annotations.proto";
 import "akkaserverless/annotations.proto";
-import "shopping_cart_ese_domain.proto";
+import "shopping_cart_ese_entity.proto";
+
+option java_outer_classname = "ShoppingCartEseView";
 
 service OrdersByCustomerEseView {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_VIEW
   };
 
-  rpc UpdateItemAdded(domain.ItemAdded) returns (domain.Cart) {
+  rpc UpdateItemAdded(entity.ItemAdded) returns (entity.Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "cart_ese"
     };
@@ -21,7 +23,7 @@ service OrdersByCustomerEseView {
     };
   }
 
-  rpc UpdateItemChangedQuantity(domain.ItemChangedQuantity) returns (domain.Cart) {
+  rpc UpdateItemChangedQuantity(entity.ItemChangedQuantity) returns (entity.Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "cart_ese"
     };
@@ -31,7 +33,7 @@ service OrdersByCustomerEseView {
     };
   }
 
-  rpc UpdateItemRemoved(domain.ItemRemoved) returns (domain.Cart) {
+  rpc UpdateItemRemoved(entity.ItemRemoved) returns (entity.Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "cart_ese"
     };
@@ -41,7 +43,7 @@ service OrdersByCustomerEseView {
     };
   }
 
-  rpc UpdateCheckedOut(domain.CheckedOut) returns (domain.Cart) {
+  rpc UpdateCheckedOut(entity.CheckedOut) returns (entity.Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "cart_ese"
     };
@@ -51,7 +53,7 @@ service OrdersByCustomerEseView {
     };
   }
 
-  rpc UpdateCartRemoved(domain.CartRemoved) returns (domain.Cart) {
+  rpc UpdateCartRemoved(entity.CartRemoved) returns (entity.Cart) {
     option (akkaserverless.method).eventing.in = {
       event_sourced_entity: "cart_ese"
     };
@@ -76,5 +78,5 @@ message GetOrdersByCustomerRequest {
 }
 
 message CustomerOrdersResponse {
-  repeated domain.Cart orders = 1;
+  repeated entity.Cart orders = 1;
 }

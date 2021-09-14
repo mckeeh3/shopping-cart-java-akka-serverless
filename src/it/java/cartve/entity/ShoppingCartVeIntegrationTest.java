@@ -2,10 +2,10 @@
  * As long as this file exists it will not be re-generated.
  * You are free to make changes to this file.
  */
-package cartve.domain;
+package cartve.entity;
 
-import cartve.CartServiceClient;
-import cartve.ShoppingCartVeApi;
+import cartve.api.CartServiceClient;
+import cartve.api.ShoppingCartVeApi;
 import com.akkaserverless.javasdk.testkit.junit.AkkaServerlessTestkitResource;
 import com.google.protobuf.Empty;
 import io.example.Main;

@@ -2,7 +2,7 @@
  * As long as this file exists it will not be re-generated.
  * You are free to make changes to this file.
  */
-package cartve.domain;
+package cartve.entity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 import com.akkaserverless.javasdk.valueentity.ValueEntityContext;
 import com.google.protobuf.Empty;
 
-import cartve.ShoppingCartVeApi;
-import cartve.ShoppingCartVeApi.AddLineItem;
-import cartve.ShoppingCartVeApi.ChangeLineItemQuantity;
-import cartve.ShoppingCartVeApi.CheckoutShoppingCart;
-import cartve.ShoppingCartVeApi.RemoveLineItem;
-import cartve.ShoppingCartVeApi.RemoveShoppingCart;
-import cartve.domain.ShoppingCartVeDomain.Cart;
+import cartve.api.ShoppingCartVeApi;
+import cartve.api.ShoppingCartVeApi.AddLineItem;
+import cartve.api.ShoppingCartVeApi.ChangeLineItemQuantity;
+import cartve.api.ShoppingCartVeApi.CheckoutShoppingCart;
+import cartve.api.ShoppingCartVeApi.RemoveLineItem;
+import cartve.api.ShoppingCartVeApi.RemoveShoppingCart;
+import cartve.entity.ShoppingCartVeEntity.Cart;
 
 public class ShoppingCartVe extends AbstractShoppingCartVe {
   private final String entityId;
@@ -28,40 +28,40 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
   }
 
   @Override
-  public ShoppingCartVeDomain.Cart emptyState() {
-    return ShoppingCartVeDomain.Cart
+  public ShoppingCartVeEntity.Cart emptyState() {
+    return ShoppingCartVeEntity.Cart
         .newBuilder()
         .setCartId(entityId)
         .build();
   }
 
   @Override
-  public Effect<Empty> addItem(ShoppingCartVeDomain.Cart currentState, ShoppingCartVeApi.AddLineItem command) {
+  public Effect<Empty> addItem(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.AddLineItem command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
   @Override
-  public Effect<Empty> changeItem(ShoppingCartVeDomain.Cart currentState, ShoppingCartVeApi.ChangeLineItemQuantity command) {
+  public Effect<Empty> changeItem(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.ChangeLineItemQuantity command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
   @Override
-  public Effect<Empty> removeItem(ShoppingCartVeDomain.Cart currentState, ShoppingCartVeApi.RemoveLineItem command) {
+  public Effect<Empty> removeItem(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.RemoveLineItem command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
   @Override
-  public Effect<Empty> checkoutCart(ShoppingCartVeDomain.Cart currentState, ShoppingCartVeApi.CheckoutShoppingCart command) {
+  public Effect<Empty> checkoutCart(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.CheckoutShoppingCart command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
   @Override
-  public Effect<ShoppingCartVeApi.Cart> getCart(ShoppingCartVeDomain.Cart currentState, ShoppingCartVeApi.GetShoppingCart command) {
+  public Effect<ShoppingCartVeApi.Cart> getCart(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.GetShoppingCart command) {
     return handle(currentState);
   }
 
   @Override
-  public Effect<Empty> removeCart(ShoppingCartVeDomain.Cart currentState, ShoppingCartVeApi.RemoveShoppingCart command) {
+  public Effect<Empty> removeCart(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.RemoveShoppingCart command) {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
@@ -206,7 +206,7 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
         this.quantity = quantity;
       }
 
-      static LineItem toLineItem(cartve.domain.ShoppingCartVeDomain.LineItem item) {
+      static LineItem toLineItem(cartve.entity.ShoppingCartVeEntity.LineItem item) {
         return new LineItem(item.getProductId(), item.getName(), item.getQuantity());
       }
     }
@@ -248,15 +248,15 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
       return shoppingCart;
     }
 
-    ShoppingCartVeDomain.Cart toState() {
-      var lineItems = items.values().stream().map(item -> ShoppingCartVeDomain.LineItem
+    ShoppingCartVeEntity.Cart toState() {
+      var lineItems = items.values().stream().map(item -> ShoppingCartVeEntity.LineItem
           .newBuilder()
           .setProductId(item.productId)
           .setName(item.name)
           .setQuantity(item.quantity)
           .build())
           .collect(Collectors.toList());
-      return ShoppingCartVeDomain.Cart
+      return ShoppingCartVeEntity.Cart
           .newBuilder()
           .setCartId(cartId)
           .setCustomerId(customerId)

@@ -1,13 +1,15 @@
 syntax = "proto3";
 
+package cartve.action;
+
+import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
-import "akkaserverless/annotations.proto";
 
-package cartve.api; // <==== for Value Entity API
+option java_outer_classname = "ShoppingCartVeToTopicOuter";
 
 message AddLineItem {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1;
   string customer_id = 2;
   string product_id = 3;
   string name = 4;
@@ -15,51 +17,36 @@ message AddLineItem {
 }
 
 message ChangeLineItemQuantity {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1;
   string product_id = 2;
   int32 quantity = 3;
 }
 
 message RemoveLineItem {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1;
   string product_id = 2;
 }
 
 message CheckoutShoppingCart {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
-}
-
-message GetShoppingCart {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1;
 }
 
 message RemoveShoppingCart {
-  string cart_id = 1 [(akkaserverless.field).entity_key = true];
+  string cart_id = 1;
 }
 
-message LineItem {
-  string product_id = 1;
-  string name = 2;
-  int32 quantity = 3;
-}
-
-message Cart {
-  string customer_id = 1;
-  bool checked_out = 2;
-  bool deleted = 3;
-  repeated LineItem items = 4;
-}
-
-service CartService {
+service ShoppingCartVeToTopic {
   option (akkaserverless.service) = {
-    type: SERVICE_TYPE_ENTITY
-    component: "cartve.entity.ShoppingCartVe" // <==== for Value Entity API
+    type: SERVICE_TYPE_ACTION
   };
 
   rpc AddItem(AddLineItem) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/ve/cart/{cart_id}/items/add"
       body: "*"
+    };
+    option (akkaserverless.method).eventing.out = {
+      topic: "ve-shopping-cart"
     };
   }
 
@@ -68,27 +55,30 @@ service CartService {
       put: "/ve/cart/{cart_id}/items/{product_id}/change"
       body: "*"
     };
+    option (akkaserverless.method).eventing.out = {
+      topic: "ve-shopping-cart"
+    };
   }
 
   rpc RemoveItem(RemoveLineItem) returns (google.protobuf.Empty) {
     option (google.api.http).put = "/ve/cart/{cart_id}/items/{product_id}/remove";
+    option (akkaserverless.method).eventing.out = {
+      topic: "ve-shopping-cart"
+    };
   }
 
   rpc CheckoutCart(CheckoutShoppingCart) returns (google.protobuf.Empty) {
     option (google.api.http).put = "/ve/cart/{cart_id}/checkout";
-  }
-
-  rpc GetCart(GetShoppingCart) returns (Cart) {
-    option (google.api.http) = {
-      get: "/ve/carts/{cart_id}"
-      additional_bindings: {
-        get: "/ve/carts/{cart_id}/items"
-        response_body: "items"
-      }
+    option (akkaserverless.method).eventing.out = {
+      topic: "ve-shopping-cart"
     };
   }
 
   rpc RemoveCart (RemoveShoppingCart) returns (google.protobuf.Empty) {
-    option (google.api.http).post = "/ve/carts/{cart_id}/remove";
+    option (google.api.http).put = "/ve/carts/{cart_id}/remove";
+    option (akkaserverless.method).eventing.out = {
+      topic: "ve-shopping-cart"
+    };
   }
 }
+

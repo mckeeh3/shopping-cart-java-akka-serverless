@@ -4,14 +4,14 @@ package cartve.view;
 
 import "google/api/annotations.proto";
 import "akkaserverless/annotations.proto";
-import "shopping_cart_ve_domain.proto";
+import "shopping_cart_ve_entity.proto";
 
 service OrdersByCustomerVeView {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_VIEW
   };
 
-  rpc UpdateCustomerOrders(domain.Cart) returns (domain.Cart) {
+  rpc UpdateCustomerOrders(entity.Cart) returns (entity.Cart) {
     option (akkaserverless.method).eventing.in = {
       value_entity: "cart_ve"
     };
@@ -35,5 +35,5 @@ message GetOrdersByCustomerRequest {
 }
 
 message CustomerOrdersResponse {
-  repeated domain.Cart orders = 2;
+  repeated entity.Cart orders = 2;
 }

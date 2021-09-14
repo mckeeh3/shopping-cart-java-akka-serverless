@@ -1,10 +1,12 @@
 syntax = "proto3";
 
+package cartese.api; // <==== for Event Sourced Entity API
+
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "akkaserverless/annotations.proto";
 
-package cartese; // <==== for Event Sourced Entity API
+option java_outer_classname = "ShoppingCartEseApi";
 
 message AddLineItem {
   string cart_id = 1 [(akkaserverless.field).entity_key = true];
@@ -53,7 +55,7 @@ message Cart {
 service CartService {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_ENTITY
-    component: ".domain.ShoppingCartEse" // <==== for Event Sourced Entity API
+    component: "cartese.entity.ShoppingCartEse" // <==== for Event Sourced Entity API
   };
 
   rpc AddItem(AddLineItem) returns (google.protobuf.Empty) {

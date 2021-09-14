@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package cartve.domain;
+package cartve.entity;
 
 import "akkaserverless/annotations.proto";
 
@@ -9,22 +9,6 @@ option (akkaserverless.file).value_entity = {
   entity_type: "cart_ve"
   state: "Cart"
 };
-
-message ItemAdded {
-  LineItem item = 1;
-}
-
-message ItemChangedQuantity {
-  LineItem item = 1;
-}
-
-message ItemRemoved {
-  string product_id = 1;
-}
-
-message CheckedOut {
-  int64 checked_out_timestamp = 1;
-}
 
 message Cart {
   string customer_id = 1;

@@ -2,10 +2,10 @@
  * As long as this file exists it will not be re-generated.
  * You are free to make changes to this file.
  */
-package cartese.domain;
+package cartese.entity;
 
-import cartese.CartServiceClient;
-import cartese.ShoppingCartEseApi;
+import cartese.api.CartServiceClient;
+import cartese.api.ShoppingCartEseApi;
 import com.akkaserverless.javasdk.testkit.junit.AkkaServerlessTestkitResource;
 import com.google.protobuf.Empty;
 import io.example.Main;
