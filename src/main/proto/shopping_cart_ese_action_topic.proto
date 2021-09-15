@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package cartese.action.in;
+package cartese.action;
 
 import "akkaserverless/annotations.proto";
 import "google/api/annotations.proto";
@@ -70,4 +70,3 @@ service ShoppingCartEseTopicIn {
     };
   }
 }
-

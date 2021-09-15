@@ -8,8 +8,7 @@ package io.example;
 import com.akkaserverless.javasdk.AkkaServerless;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cartese.action.in.ShoppingCartEseTopicInAction;
-import cartese.action.out.ShoppingCartEseTopicOutAction;
+import cartese.action.ShoppingCartEseTopicInAction;
 import cartese.entity.ShoppingCartEse;
 import cartese.view.OrdersByCustomerEseViewImplView;
 import cartve.action.ShoppingCartVeToTopicAction;
@@ -29,7 +28,6 @@ public final class Main {
       ShoppingCartEse::new,
       ShoppingCartVe::new,
       ShoppingCartVeToTopicAction::new,
-      ShoppingCartEseTopicOutAction::new,
       ShoppingCartEseTopicInAction::new,
       OrdersByCustomerVeViewImplView::new,
       OrdersByCustomerEseViewImplView::new);

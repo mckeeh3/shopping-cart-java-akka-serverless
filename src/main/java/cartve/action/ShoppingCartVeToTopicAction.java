@@ -5,36 +5,104 @@
 
 package cartve.action;
 
+import com.akkaserverless.javasdk.ServiceCallRef;
 import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Empty;
 
+import cartve.api.ShoppingCartVeApi;
+import cartve.entity.ShoppingCartVe;
+
 public class ShoppingCartVeToTopicAction extends AbstractShoppingCartVeToTopicAction {
+  private final ActionCreationContext creationContext;
+  private final ServiceCallRef<ShoppingCartVeApi.AddLineItem> addItemRef;
+  private final ServiceCallRef<ShoppingCartVeApi.ChangeLineItemQuantity> changeItemRef;
+  private final ServiceCallRef<ShoppingCartVeApi.RemoveLineItem> removeItemRef;
+  private final ServiceCallRef<ShoppingCartVeApi.CheckoutShoppingCart> checkoutCartRef;
+  private final ServiceCallRef<ShoppingCartVeApi.RemoveShoppingCart> removeCartRef;
 
   public ShoppingCartVeToTopicAction(ActionCreationContext creationContext) {
+    this.creationContext = creationContext;
+    addItemRef = addItemRef();
+    changeItemRef = changeItemRef();
+    removeItemRef = removeItemRef();
+    checkoutCartRef = checkoutCartRef();
+    removeCartRef = removeCartRef();
   }
 
   @Override
-  public Effect<Empty> addItem(ShoppingCartVeToTopicOuter.AddLineItem addLineItem) {
-    throw new RuntimeException("The command handler for `AddItem` is not implemented, yet");
+  public Effect<Empty> addItem(ShoppingCartVeActionTopicIn.AddLineItem addLineItem) {
+    var arg = ShoppingCartVeApi.AddLineItem
+        .newBuilder()
+        .setCustomerId(addLineItem.getCustomerId())
+        .setCartId(addLineItem.getCartId())
+        .setProductId(addLineItem.getProductId())
+        .setName(addLineItem.getName())
+        .setQuantity(addLineItem.getQuantity())
+        .build();
+    return effects().forward(addItemRef.createCall(arg));
   }
 
   @Override
-  public Effect<Empty> changeItem(ShoppingCartVeToTopicOuter.ChangeLineItemQuantity changeLineItemQuantity) {
-    throw new RuntimeException("The command handler for `ChangeItem` is not implemented, yet");
+  public Effect<Empty> changeItem(ShoppingCartVeActionTopicIn.ChangeLineItemQuantity changeLineItemQuantity) {
+    var arg = ShoppingCartVeApi.ChangeLineItemQuantity
+        .newBuilder()
+        .setCartId(changeLineItemQuantity.getCartId())
+        .setProductId(changeLineItemQuantity.getProductId())
+        .setQuantity(changeLineItemQuantity.getQuantity())
+        .build();
+    return effects().forward(changeItemRef.createCall(arg));
   }
 
   @Override
-  public Effect<Empty> removeItem(ShoppingCartVeToTopicOuter.RemoveLineItem removeLineItem) {
-    throw new RuntimeException("The command handler for `RemoveItem` is not implemented, yet");
+  public Effect<Empty> removeItem(ShoppingCartVeActionTopicIn.RemoveLineItem removeLineItem) {
+    var arg = ShoppingCartVeApi.RemoveLineItem
+        .newBuilder()
+        .setCartId(removeLineItem.getCartId())
+        .setProductId(removeLineItem.getProductId())
+        .build();
+    return effects().forward(removeItemRef.createCall(arg));
   }
 
   @Override
-  public Effect<Empty> checkoutCart(ShoppingCartVeToTopicOuter.CheckoutShoppingCart checkoutShoppingCart) {
-    throw new RuntimeException("The command handler for `CheckoutCart` is not implemented, yet");
+  public Effect<Empty> checkoutCart(ShoppingCartVeActionTopicIn.CheckoutShoppingCart checkoutShoppingCart) {
+    var arg = ShoppingCartVeApi.CheckoutShoppingCart
+        .newBuilder()
+        .setCartId(checkoutShoppingCart.getCartId())
+        .build();
+    return effects().forward(checkoutCartRef.createCall(arg));
   }
 
   @Override
-  public Effect<Empty> removeCart(ShoppingCartVeToTopicOuter.RemoveShoppingCart removeShoppingCart) {
-    throw new RuntimeException("The command handler for `RemoveCart` is not implemented, yet");
+  public Effect<Empty> removeCart(ShoppingCartVeActionTopicIn.RemoveShoppingCart removeShoppingCart) {
+    var arg = ShoppingCartVeApi.RemoveShoppingCart
+        .newBuilder()
+        .setCartId(removeShoppingCart.getCartId())
+        .build();
+    return effects().forward(removeCartRef.createCall(arg));
+  }
+
+  private ServiceCallRef<ShoppingCartVeApi.AddLineItem> addItemRef() {
+    return creationContext.serviceCallFactory()
+        .lookup(ShoppingCartVe.class.getName(), "addItem", ShoppingCartVeApi.AddLineItem.class);
+  }
+
+  private ServiceCallRef<ShoppingCartVeApi.ChangeLineItemQuantity> changeItemRef() {
+    return creationContext.serviceCallFactory()
+        .lookup(ShoppingCartVe.class.getName(), "changeItem", ShoppingCartVeApi.ChangeLineItemQuantity.class);
+  }
+
+  private ServiceCallRef<ShoppingCartVeApi.RemoveLineItem> removeItemRef() {
+    return creationContext.serviceCallFactory()
+        .lookup(ShoppingCartVe.class.getName(), "removeItem", ShoppingCartVeApi.RemoveLineItem.class);
+  }
+
+  private ServiceCallRef<ShoppingCartVeApi.CheckoutShoppingCart> checkoutCartRef() {
+    return creationContext.serviceCallFactory()
+        .lookup(ShoppingCartVe.class.getName(), "checkoutCart", ShoppingCartVeApi.CheckoutShoppingCart.class);
+  }
+
+  private ServiceCallRef<ShoppingCartVeApi.RemoveShoppingCart> removeCartRef() {
+    return creationContext.serviceCallFactory()
+        .lookup(ShoppingCartVe.class.getName(), "removeCart", ShoppingCartVeApi.RemoveShoppingCart.class);
   }
 }

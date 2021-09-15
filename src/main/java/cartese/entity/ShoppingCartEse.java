@@ -18,7 +18,6 @@ import cartese.api.ShoppingCartEseApi.ChangeLineItemQuantity;
 import cartese.api.ShoppingCartEseApi.CheckoutShoppingCart;
 import cartese.api.ShoppingCartEseApi.RemoveLineItem;
 import cartese.api.ShoppingCartEseApi.RemoveShoppingCart;
-import cartese.entity.ShoppingCartEseEntity;
 import cartese.entity.ShoppingCartEseEntity.Cart;
 import cartese.entity.ShoppingCartEseEntity.CartRemoved;
 import cartese.entity.ShoppingCartEseEntity.CheckedOut;
