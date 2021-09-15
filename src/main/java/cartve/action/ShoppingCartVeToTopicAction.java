@@ -15,7 +15,6 @@ import cartve.api.ShoppingCartVeApi.ChangeLineItemQuantity;
 import cartve.api.ShoppingCartVeApi.CheckoutShoppingCart;
 import cartve.api.ShoppingCartVeApi.RemoveLineItem;
 import cartve.api.ShoppingCartVeApi.RemoveShoppingCart;
-import cartve.entity.ShoppingCartVe;
 
 public class ShoppingCartVeToTopicAction extends AbstractShoppingCartVeToTopicAction {
   private final ActionCreationContext creationContext;
@@ -93,26 +92,26 @@ public class ShoppingCartVeToTopicAction extends AbstractShoppingCartVeToTopicAc
 
   private ServiceCallRef<ShoppingCartVeApi.AddLineItem> addItemRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartVe.class.getName(), "addItem", ShoppingCartVeApi.AddLineItem.class);
+        .lookup("cartve.api.CartService", "AddItem", ShoppingCartVeApi.AddLineItem.class);
   }
 
   private ServiceCallRef<ShoppingCartVeApi.ChangeLineItemQuantity> changeItemRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartVe.class.getName(), "changeItem", ShoppingCartVeApi.ChangeLineItemQuantity.class);
+        .lookup("cartve.api.CartService", "ChangeItem", ShoppingCartVeApi.ChangeLineItemQuantity.class);
   }
 
   private ServiceCallRef<ShoppingCartVeApi.RemoveLineItem> removeItemRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartVe.class.getName(), "removeItem", ShoppingCartVeApi.RemoveLineItem.class);
+        .lookup("cartve.api.CartService", "RemoveItem", ShoppingCartVeApi.RemoveLineItem.class);
   }
 
   private ServiceCallRef<ShoppingCartVeApi.CheckoutShoppingCart> checkoutCartRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartVe.class.getName(), "checkoutCart", ShoppingCartVeApi.CheckoutShoppingCart.class);
+        .lookup("cartve.api.CartService", "CheckoutCart", ShoppingCartVeApi.CheckoutShoppingCart.class);
   }
 
   private ServiceCallRef<ShoppingCartVeApi.RemoveShoppingCart> removeCartRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartVe.class.getName(), "removeCart", ShoppingCartVeApi.RemoveShoppingCart.class);
+        .lookup("cartve.api.CartService", "RemoveCart", ShoppingCartVeApi.RemoveShoppingCart.class);
   }
 }

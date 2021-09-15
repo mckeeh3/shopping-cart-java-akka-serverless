@@ -15,7 +15,6 @@ import cartese.api.ShoppingCartEseApi.ChangeLineItemQuantity;
 import cartese.api.ShoppingCartEseApi.CheckoutShoppingCart;
 import cartese.api.ShoppingCartEseApi.RemoveLineItem;
 import cartese.api.ShoppingCartEseApi.RemoveShoppingCart;
-import cartese.entity.ShoppingCartEse;
 
 public class ShoppingCartEseTopicInAction extends AbstractShoppingCartEseTopicInAction {
   private final ActionCreationContext creationContext;
@@ -93,26 +92,26 @@ public class ShoppingCartEseTopicInAction extends AbstractShoppingCartEseTopicIn
 
   private ServiceCallRef<ShoppingCartEseApi.AddLineItem> addItemRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartEse.class.getName(), "addItem", ShoppingCartEseApi.AddLineItem.class);
+        .lookup("cartese.api.CartService", "AddItem", ShoppingCartEseApi.AddLineItem.class);
   }
 
   private ServiceCallRef<ShoppingCartEseApi.ChangeLineItemQuantity> changeItemRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartEse.class.getName(), "changeItem", ShoppingCartEseApi.ChangeLineItemQuantity.class);
+        .lookup("cartese.api.CartService", "ChangeItem", ShoppingCartEseApi.ChangeLineItemQuantity.class);
   }
 
   private ServiceCallRef<ShoppingCartEseApi.RemoveLineItem> removeItemRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartEse.class.getName(), "removeItem", ShoppingCartEseApi.RemoveLineItem.class);
+        .lookup("cartese.api.CartService", "RemoveItem", ShoppingCartEseApi.RemoveLineItem.class);
   }
 
   private ServiceCallRef<ShoppingCartEseApi.CheckoutShoppingCart> checkoutCartRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartEse.class.getName(), "checkoutCart", ShoppingCartEseApi.CheckoutShoppingCart.class);
+        .lookup("cartese.api.CartService", "CheckoutCart", ShoppingCartEseApi.CheckoutShoppingCart.class);
   }
 
   private ServiceCallRef<ShoppingCartEseApi.RemoveShoppingCart> removeCartRef() {
     return creationContext.serviceCallFactory()
-        .lookup(ShoppingCartEse.class.getName(), "removeCart", ShoppingCartEseApi.RemoveShoppingCart.class);
+        .lookup("cartese.api.CartService", "RemoveCart", ShoppingCartEseApi.RemoveShoppingCart.class);
   }
 }

@@ -1,12 +1,12 @@
 
 ### For use with VSCode Rest Client extension
 
-@hostname = restless-shape-0499.us-east1.akkaserverless.app
+@hostname = floral-mode-9847.us-east1.akkaserverless.app
 @customerId = customer-1
 @cartId = cart-1
-@productId = product-5
-@productName = product name 5
-@quantity = 55
+@productId = product-1
+@productName = product name 1
+@quantity = 1
 
 ### cartve.CartService.AddItem
 
@@ -14,7 +14,7 @@ curl -XPOST -d '{
   "cart_id": "{{cartId}}",
   "customer_id": "{{customerId}}",
   "product_id": "{{productId}}",
-  "name": "product name 1",
+  "name": "{{productName}}",
   "quantity": {{quantity}}
 }' https://{{hostname}}/ve/cart/{{cartId}}/items/add -H "Content-Type: application/json"
 
@@ -40,7 +40,7 @@ curl -XGET -d '{
 
 ### cartve.CartService.RemoveCart
 
-curl -XPOST -d '{
+curl -XPUT -d '{
   "cart_id": "{{cartId}}"
 }' https://{{hostname}}/ve/carts/{{cartId}}/remove -H "Content-Type: application/json"
 
