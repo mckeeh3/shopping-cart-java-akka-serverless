@@ -10,28 +10,47 @@ import com.akkaserverless.javasdk.action.ActionCreationContext;
 import com.google.protobuf.Empty;
 
 import cartve.api.ShoppingCartVeApi;
+import cartve.api.ShoppingCartVeApi.AddLineItem;
+import cartve.api.ShoppingCartVeApi.ChangeLineItemQuantity;
+import cartve.api.ShoppingCartVeApi.CheckoutShoppingCart;
+import cartve.api.ShoppingCartVeApi.RemoveLineItem;
+import cartve.api.ShoppingCartVeApi.RemoveShoppingCart;
 import cartve.entity.ShoppingCartVe;
 
 public class ShoppingCartVeToTopicAction extends AbstractShoppingCartVeToTopicAction {
   private final ActionCreationContext creationContext;
-  private final ServiceCallRef<ShoppingCartVeApi.AddLineItem> addItemRef;
-  private final ServiceCallRef<ShoppingCartVeApi.ChangeLineItemQuantity> changeItemRef;
-  private final ServiceCallRef<ShoppingCartVeApi.RemoveLineItem> removeItemRef;
-  private final ServiceCallRef<ShoppingCartVeApi.CheckoutShoppingCart> checkoutCartRef;
-  private final ServiceCallRef<ShoppingCartVeApi.RemoveShoppingCart> removeCartRef;
 
   public ShoppingCartVeToTopicAction(ActionCreationContext creationContext) {
     this.creationContext = creationContext;
-    addItemRef = addItemRef();
-    changeItemRef = changeItemRef();
-    removeItemRef = removeItemRef();
-    checkoutCartRef = checkoutCartRef();
-    removeCartRef = removeCartRef();
   }
 
   @Override
   public Effect<Empty> addItem(ShoppingCartVeActionTopicIn.AddLineItem addLineItem) {
-    var arg = ShoppingCartVeApi.AddLineItem
+    return effects().forward(addItemRef().createCall(toApi(addLineItem)));
+  }
+
+  @Override
+  public Effect<Empty> changeItem(ShoppingCartVeActionTopicIn.ChangeLineItemQuantity changeLineItemQuantity) {
+    return effects().forward(changeItemRef().createCall(toApi(changeLineItemQuantity)));
+  }
+
+  @Override
+  public Effect<Empty> removeItem(ShoppingCartVeActionTopicIn.RemoveLineItem removeLineItem) {
+    return effects().forward(removeItemRef().createCall(toApi(removeLineItem)));
+  }
+
+  @Override
+  public Effect<Empty> checkoutCart(ShoppingCartVeActionTopicIn.CheckoutShoppingCart checkoutShoppingCart) {
+    return effects().forward(checkoutCartRef().createCall(toApi(checkoutShoppingCart)));
+  }
+
+  @Override
+  public Effect<Empty> removeCart(ShoppingCartVeActionTopicIn.RemoveShoppingCart removeShoppingCart) {
+    return effects().forward(removeCartRef().createCall(toApi(removeShoppingCart)));
+  }
+
+  private static AddLineItem toApi(ShoppingCartVeActionTopicIn.AddLineItem addLineItem) {
+    return ShoppingCartVeApi.AddLineItem
         .newBuilder()
         .setCustomerId(addLineItem.getCustomerId())
         .setCartId(addLineItem.getCartId())
@@ -39,46 +58,37 @@ public class ShoppingCartVeToTopicAction extends AbstractShoppingCartVeToTopicAc
         .setName(addLineItem.getName())
         .setQuantity(addLineItem.getQuantity())
         .build();
-    return effects().forward(addItemRef.createCall(arg));
   }
 
-  @Override
-  public Effect<Empty> changeItem(ShoppingCartVeActionTopicIn.ChangeLineItemQuantity changeLineItemQuantity) {
-    var arg = ShoppingCartVeApi.ChangeLineItemQuantity
+  private static ChangeLineItemQuantity toApi(ShoppingCartVeActionTopicIn.ChangeLineItemQuantity changeLineItemQuantity) {
+    return ShoppingCartVeApi.ChangeLineItemQuantity
         .newBuilder()
         .setCartId(changeLineItemQuantity.getCartId())
         .setProductId(changeLineItemQuantity.getProductId())
         .setQuantity(changeLineItemQuantity.getQuantity())
         .build();
-    return effects().forward(changeItemRef.createCall(arg));
   }
 
-  @Override
-  public Effect<Empty> removeItem(ShoppingCartVeActionTopicIn.RemoveLineItem removeLineItem) {
-    var arg = ShoppingCartVeApi.RemoveLineItem
+  private static RemoveLineItem toApi(ShoppingCartVeActionTopicIn.RemoveLineItem removeLineItem) {
+    return ShoppingCartVeApi.RemoveLineItem
         .newBuilder()
         .setCartId(removeLineItem.getCartId())
         .setProductId(removeLineItem.getProductId())
         .build();
-    return effects().forward(removeItemRef.createCall(arg));
   }
 
-  @Override
-  public Effect<Empty> checkoutCart(ShoppingCartVeActionTopicIn.CheckoutShoppingCart checkoutShoppingCart) {
-    var arg = ShoppingCartVeApi.CheckoutShoppingCart
+  private static CheckoutShoppingCart toApi(ShoppingCartVeActionTopicIn.CheckoutShoppingCart checkoutShoppingCart) {
+    return ShoppingCartVeApi.CheckoutShoppingCart
         .newBuilder()
         .setCartId(checkoutShoppingCart.getCartId())
         .build();
-    return effects().forward(checkoutCartRef.createCall(arg));
   }
 
-  @Override
-  public Effect<Empty> removeCart(ShoppingCartVeActionTopicIn.RemoveShoppingCart removeShoppingCart) {
-    var arg = ShoppingCartVeApi.RemoveShoppingCart
+  private static RemoveShoppingCart toApi(ShoppingCartVeActionTopicIn.RemoveShoppingCart removeShoppingCart) {
+    return ShoppingCartVeApi.RemoveShoppingCart
         .newBuilder()
         .setCartId(removeShoppingCart.getCartId())
         .build();
-    return effects().forward(removeCartRef.createCall(arg));
   }
 
   private ServiceCallRef<ShoppingCartVeApi.AddLineItem> addItemRef() {
