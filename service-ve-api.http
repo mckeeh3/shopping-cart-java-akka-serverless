@@ -51,6 +51,6 @@ curl -XPUT -d '{
   "product_id": "{{productId}}"
 }' https://{{hostname}}/ve/cart/{{cartId}}/items/{{productId}}/remove -H "Content-Type: application/json"
 
-### cartve.CartService.RemoveItem
+### cartese.view.OrdersByCustomerEseView.GetOrdersByCustomer
 
 curl -XGET "https://{{hostname}}/ve/orders?customer_id={{customerId}}"

@@ -3,7 +3,7 @@
 
 @hostname = floral-mode-9847.us-east1.akkaserverless.app
 @customerId = customer-1
-@cartId = cart-3
+@cartId = cart-1
 @productId = product-1
 @productName = product name 1
 @quantity = 1
@@ -14,7 +14,7 @@ curl -XPOST -d '{
   "cart_id": "{{cartId}}",
   "customer_id": "{{customerId}}",
   "product_id": "{{productId}}",
-  "name": "product name 1",
+  "name": "{{productName}}",
   "quantity": {{quantity}}
 }' https://{{hostname}}/ese/cart/{{cartId}}/items/add -H "Content-Type: application/json"
 
