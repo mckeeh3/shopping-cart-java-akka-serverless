@@ -89,6 +89,6 @@ service CartService {
   }
 
   rpc RemoveCart (RemoveShoppingCart) returns (google.protobuf.Empty) {
-    option (google.api.http).post = "/ve/carts/{cart_id}/remove";
+    option (google.api.http).put = "/ve/carts/{cart_id}/remove";
   }
 }
