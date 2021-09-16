@@ -25,37 +25,42 @@ public class OrdersByCustomerEseViewImplView extends AbstractOrdersByCustomerEse
 
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateItemAdded(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.ItemAdded event) {
-    var shoppingCart = ShoppingCart.toShoppingCart(state);
-    shoppingCart.handle(event);
-    return effects().updateState(shoppingCart.toState());
+    return effects().updateState(
+        ShoppingCart.toShoppingCart(state)
+            .handle(event)
+            .toState());
   }
 
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateItemChangedQuantity(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.ItemChangedQuantity event) {
-    var shoppingCart = ShoppingCart.toShoppingCart(state);
-    shoppingCart.handle(event);
-    return effects().updateState(shoppingCart.toState());
+    return effects().updateState(
+        ShoppingCart.toShoppingCart(state)
+            .handle(event)
+            .toState());
   }
 
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateItemRemoved(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.ItemRemoved event) {
-    var shoppingCart = ShoppingCart.toShoppingCart(state);
-    shoppingCart.handle(event);
-    return effects().updateState(shoppingCart.toState());
+    return effects().updateState(
+        ShoppingCart.toShoppingCart(state)
+            .handle(event)
+            .toState());
   }
 
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateCheckedOut(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.CheckedOut event) {
-    var shoppingCart = ShoppingCart.toShoppingCart(state);
-    shoppingCart.handle(event);
-    return effects().updateState(shoppingCart.toState());
+    return effects().updateState(
+        ShoppingCart.toShoppingCart(state)
+            .handle(event)
+            .toState());
   }
 
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateCartRemoved(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.CartRemoved event) {
-    var shoppingCart = ShoppingCart.toShoppingCart(state);
-    shoppingCart.handle(event);
-    return effects().updateState(shoppingCart.toState());
+    return effects().updateState(
+        ShoppingCart.toShoppingCart(state)
+            .handle(event)
+            .toState());
   }
 
   static class ShoppingCart {
@@ -77,26 +82,31 @@ public class OrdersByCustomerEseViewImplView extends AbstractOrdersByCustomerEse
       }
     }
 
-    void handle(ShoppingCartEseEntity.ItemAdded event) {
+    ShoppingCart handle(ShoppingCartEseEntity.ItemAdded event) {
       cartId = event.getCartId();
       customerId = event.getCustomerId();
       items.put(event.getItem().getProductId(), toItem(event.getItem()));
+      return this;
     }
 
-    void handle(ShoppingCartEseEntity.ItemChangedQuantity event) {
+    ShoppingCart handle(ShoppingCartEseEntity.ItemChangedQuantity event) {
       items.computeIfPresent(event.getProductId(), ((key, value) -> new LineItem(key, value.name, event.getQuantity())));
+      return this;
     }
 
-    void handle(ShoppingCartEseEntity.ItemRemoved event) {
+    ShoppingCart handle(ShoppingCartEseEntity.ItemRemoved event) {
       items.remove(event.getProductId());
+      return this;
     }
 
-    void handle(ShoppingCartEseEntity.CheckedOut event) {
+    ShoppingCart handle(ShoppingCartEseEntity.CheckedOut event) {
       checkedOut = true;
+      return this;
     }
 
-    void handle(ShoppingCartEseEntity.CartRemoved event) {
+    ShoppingCart handle(ShoppingCartEseEntity.CartRemoved event) {
       deleted = true;
+      return this;
     }
 
     static ShoppingCart toShoppingCart(Optional<ShoppingCartEseEntity.Cart> state) {
