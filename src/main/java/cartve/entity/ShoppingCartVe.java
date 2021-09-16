@@ -135,42 +135,42 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
   }
 
   private Effect<Empty> handle(Cart currentState, AddLineItem command) {
-    var shoppingCart = ShoppingCart
-        .toShoppingCart(currentState)
-        .handle(command);
-
     return effects()
-        .updateState(shoppingCart.toState())
+        .updateState(
+            ShoppingCart
+                .toShoppingCart(currentState)
+                .handle(command)
+                .toState())
         .thenReply(Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(Cart currentState, ChangeLineItemQuantity command) {
-    var shoppingCart = ShoppingCart
-        .toShoppingCart(currentState)
-        .handle(command);
-
     return effects()
-        .updateState(shoppingCart.toState())
+        .updateState(
+            ShoppingCart
+                .toShoppingCart(currentState)
+                .handle(command)
+                .toState())
         .thenReply(Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(Cart currentState, RemoveLineItem command) {
-    var shoppingCart = ShoppingCart
-        .toShoppingCart(currentState)
-        .handle(command);
-
     return effects()
-        .updateState(shoppingCart.toState())
+        .updateState(
+            ShoppingCart
+                .toShoppingCart(currentState)
+                .handle(command)
+                .toState())
         .thenReply(Empty.getDefaultInstance());
   }
 
   private Effect<Empty> handle(Cart currentState, CheckoutShoppingCart command) {
-    var shoppingCart = ShoppingCart
-        .toShoppingCart(currentState)
-        .handle(command);
-
     return effects()
-        .updateState(shoppingCart.toState())
+        .updateState(
+            ShoppingCart
+                .toShoppingCart(currentState)
+                .handle(command)
+                .toState())
         .thenReply(Empty.getDefaultInstance());
   }
 
@@ -179,12 +179,12 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
   }
 
   private Effect<Empty> handle(Cart currentState, RemoveShoppingCart command) {
-    var shoppingCart = ShoppingCart
-        .toShoppingCart(currentState)
-        .handle(command);
-
     return effects()
-        .updateState(shoppingCart.toState())
+        .updateState(
+            ShoppingCart
+                .toShoppingCart(currentState)
+                .handle(command)
+                .toState())
         .thenReply(Empty.getDefaultInstance());
   }
 
