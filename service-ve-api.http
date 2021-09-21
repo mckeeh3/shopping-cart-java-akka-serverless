@@ -1,7 +1,7 @@
 
 ### For use with VSCode Rest Client extension
 
-@hostname = sweet-heart-5226.us-east1.akkaserverless.app
+@urlPrefix = https://sweet-heart-5226.us-east1.akkaserverless.app
 @customerId = customer-1
 @cartId = cart-1
 @productId = product-1
@@ -16,7 +16,7 @@ curl -XPOST -d '{
   "product_id": "{{productId}}",
   "name": "{{productName}}",
   "quantity": {{quantity}}
-}' https://{{hostname}}/ve/cart/{{cartId}}/items/add -H "Content-Type: application/json"
+}' {{urlPrefix}}/ve/cart/{{cartId}}/items/add -H "Content-Type: application/json"
 
 ### cartve.CartService.ChangeItem
 
@@ -24,33 +24,33 @@ curl -XPUT -d '{
   "cart_id": "{{cartId}}",
   "product_id": "{{productId}}",
   "quantity": {{quantity}}
-}' https://{{hostname}}/ve/cart/{{cartId}}/items/{{productId}}/change -H "Content-Type: application/json"
+}' {{urlPrefix}}/ve/cart/{{cartId}}/items/{{productId}}/change -H "Content-Type: application/json"
 
 ### cartve.CartService.CheckoutCart
 
 curl -XPUT -d '{
   "cart_id": "{{cartId}}"
-}' https://{{hostname}}/ve/cart/{{cartId}}/checkout -H "Content-Type: application/json"
+}' {{urlPrefix}}/ve/cart/{{cartId}}/checkout -H "Content-Type: application/json"
 
 ### cartve.CartService.GetCart
 
 curl -XGET -d '{
   "cart_id": "{{cartId}}"
-}' https://{{hostname}}/ve/carts/{{cartId}} -H "Content-Type: application/json"
+}' {{urlPrefix}}/ve/carts/{{cartId}} -H "Content-Type: application/json"
 
 ### cartve.CartService.RemoveCart
 
 curl -XPUT -d '{
   "cart_id": "{{cartId}}"
-}' https://{{hostname}}/ve/carts/{{cartId}}/remove -H "Content-Type: application/json"
+}' {{urlPrefix}}/ve/carts/{{cartId}}/remove -H "Content-Type: application/json"
 
 ### cartve.CartService.RemoveItem
 
 curl -XPUT -d '{
   "cart_id": "{{cartId}}",
   "product_id": "{{productId}}"
-}' https://{{hostname}}/ve/cart/{{cartId}}/items/{{productId}}/remove -H "Content-Type: application/json"
+}' {{urlPrefix}}/ve/cart/{{cartId}}/items/{{productId}}/remove -H "Content-Type: application/json"
 
 ### cartese.view.OrdersByCustomerEseView.GetOrdersByCustomer
 
-curl -XGET "https://{{hostname}}/ve/orders?customer_id={{customerId}}"
+curl -XGET "{{urlPrefix}}/ve/orders?customer_id={{customerId}}"

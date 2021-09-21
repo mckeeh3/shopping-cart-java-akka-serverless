@@ -18,7 +18,7 @@
     <jdk.target>11</jdk.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <akkaserverless-sdk.version>0.7.0</akkaserverless-sdk.version>
+    <akkaserverless-sdk.version>0.7.1</akkaserverless-sdk.version>
     <akka-grpc.version>1.1.1</akka-grpc.version>
   </properties>
 
@@ -308,7 +308,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.3</version>
+      <version>1.2.6</version>
     </dependency>
     <dependency>
       <!-- for JSON formatted logging -->
@@ -331,7 +331,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
