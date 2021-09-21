@@ -10,10 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cartese.action.ShoppingCartEseTopicInAction;
 import cartese.entity.ShoppingCartEse;
-import cartese.view.OrdersByCustomerEseViewImplView;
+import cartese.view.OrdersByCustomerEseViewImpl;
 import cartve.action.ShoppingCartVeToTopicAction;
 import cartve.entity.ShoppingCartVe;
-import cartve.view.OrdersByCustomerVeViewImplView;
+import cartve.view.OrdersByCustomerVeViewImpl;
 
 public final class Main {
 
@@ -27,10 +27,10 @@ public final class Main {
     return AkkaServerlessFactory.withComponents(
       ShoppingCartEse::new,
       ShoppingCartVe::new,
-      ShoppingCartVeToTopicAction::new,
+      OrdersByCustomerEseViewImpl::new,
+      OrdersByCustomerVeViewImpl::new,
       ShoppingCartEseTopicInAction::new,
-      OrdersByCustomerVeViewImplView::new,
-      OrdersByCustomerEseViewImplView::new);
+      ShoppingCartVeToTopicAction::new);
   }
 
   public static void main(String[] args) throws Exception {

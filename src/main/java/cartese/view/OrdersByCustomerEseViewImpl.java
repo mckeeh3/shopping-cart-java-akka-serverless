@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.view.ViewContext;
 
-public class OrdersByCustomerEseViewImplView extends AbstractOrdersByCustomerEseViewImplView {
+public class OrdersByCustomerEseViewImpl extends AbstractOrdersByCustomerEseView {
 
-  public OrdersByCustomerEseViewImplView(ViewContext context) {
+  public OrdersByCustomerEseViewImpl(ViewContext context) {
   }
 
   @Override

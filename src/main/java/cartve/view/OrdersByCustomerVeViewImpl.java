@@ -7,9 +7,9 @@ package cartve.view;
 import cartve.entity.ShoppingCartVeEntity;
 import com.akkaserverless.javasdk.view.ViewContext;
 
-public class OrdersByCustomerVeViewImplView extends AbstractOrdersByCustomerVeViewImplView {
+public class OrdersByCustomerVeViewImpl extends AbstractOrdersByCustomerVeView {
 
-  public OrdersByCustomerVeViewImplView(ViewContext context) {}
+  public OrdersByCustomerVeViewImpl(ViewContext context) {}
 
   
 }
