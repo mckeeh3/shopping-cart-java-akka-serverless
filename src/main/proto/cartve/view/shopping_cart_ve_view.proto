@@ -4,7 +4,7 @@ package cartve.view;
 
 import "google/api/annotations.proto";
 import "akkaserverless/annotations.proto";
-import "shopping_cart_ve_entity.proto";
+import "cartve/entity/shopping_cart_ve_entity.proto";
 
 service OrdersByCustomerVeView {
   option (akkaserverless.service) = {

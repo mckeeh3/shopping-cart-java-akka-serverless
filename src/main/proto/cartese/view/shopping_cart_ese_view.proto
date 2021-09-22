@@ -4,7 +4,7 @@ package cartese.view;
 
 import "google/api/annotations.proto";
 import "akkaserverless/annotations.proto";
-import "shopping_cart_ese_entity.proto";
+import "cartese/entity/shopping_cart_ese_entity.proto";
 
 option java_outer_classname = "ShoppingCartEseView";
 
