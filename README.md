@@ -1,5 +1,9 @@
 # shopping-cart-java-akka-serverless
 
+This project is an Akka Serverless service that demonstrates a simple shopping cart implemented as an Akka Serverless service.
+The project contains two shopping cart implementations. One implementation has a shopping cart component as a value entity.
+The second shopping cart implementation has a shopping cart component as an event sourced entity.
+Both shopping cart implementation have a functionally equivalent API.
 
 ## Designing
 
@@ -45,7 +49,7 @@ docker-compose -f docker-compose.yml -f docker-compose.linux.yml up
 To start the application locally, the `exec-maven-plugin` is used. Use the following command:
 
 ```
-mvn compile exec:java
+mvn compile exec:exec
 ```
 
 With both the proxy and your application running, any defined endpoints should be available at `http://localhost:9000`. In addition to the defined gRPC interface, each method has a corresponding HTTP endpoint. Unless configured otherwise (see [Transcoding HTTP](https://developer.lightbend.com/docs/akka-serverless/java/proto.html#_transcoding_http)), this endpoint accepts POST requests at the path `/[package].[entity name]/[method]`. For example, using `curl`:
