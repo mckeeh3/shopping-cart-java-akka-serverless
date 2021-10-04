@@ -1,8 +1,8 @@
 
 ### For use with VSCode Rest Client extension
 
-# @urlPrefix = https://sweet-heart-5226.us-east1.akkaserverless.app
-@urlPrefix = http://localhost:9000
+# @urlPrefix = http://localhost:9000
+@urlPrefix = https://sweet-term-7200.us-east1.akkaserverless.app
 @customerId = customer-1
 @cartId = cart-1
 @productId = product-1
