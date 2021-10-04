@@ -16,10 +16,10 @@ import cartve.api.ShoppingCartVeApi.CheckoutShoppingCart;
 import cartve.api.ShoppingCartVeApi.RemoveLineItem;
 import cartve.api.ShoppingCartVeApi.RemoveShoppingCart;
 
-public class ShoppingCartVeToTopicAction extends AbstractShoppingCartVeToTopicAction {
+public class ShoppingCartVeTopicInAction extends AbstractShoppingCartVeTopicInAction {
   private final ActionCreationContext creationContext;
 
-  public ShoppingCartVeToTopicAction(ActionCreationContext creationContext) {
+  public ShoppingCartVeTopicInAction(ActionCreationContext creationContext) {
     this.creationContext = creationContext;
   }
 
@@ -49,69 +49,52 @@ public class ShoppingCartVeToTopicAction extends AbstractShoppingCartVeToTopicAc
   }
 
   private static AddLineItem toApi(ShoppingCartVeActionTopicIn.AddLineItem addLineItem) {
-    return ShoppingCartVeApi.AddLineItem
-        .newBuilder()
-        .setCustomerId(addLineItem.getCustomerId())
-        .setCartId(addLineItem.getCartId())
-        .setProductId(addLineItem.getProductId())
-        .setName(addLineItem.getName())
-        .setQuantity(addLineItem.getQuantity())
-        .build();
+    return ShoppingCartVeApi.AddLineItem.newBuilder().setCustomerId(addLineItem.getCustomerId())
+        .setCartId(addLineItem.getCartId()).setProductId(addLineItem.getProductId()).setName(addLineItem.getName())
+        .setQuantity(addLineItem.getQuantity()).build();
   }
 
-  private static ChangeLineItemQuantity toApi(ShoppingCartVeActionTopicIn.ChangeLineItemQuantity changeLineItemQuantity) {
-    return ShoppingCartVeApi.ChangeLineItemQuantity
-        .newBuilder()
-        .setCartId(changeLineItemQuantity.getCartId())
-        .setProductId(changeLineItemQuantity.getProductId())
-        .setQuantity(changeLineItemQuantity.getQuantity())
-        .build();
+  private static ChangeLineItemQuantity toApi(
+      ShoppingCartVeActionTopicIn.ChangeLineItemQuantity changeLineItemQuantity) {
+    return ShoppingCartVeApi.ChangeLineItemQuantity.newBuilder().setCartId(changeLineItemQuantity.getCartId())
+        .setProductId(changeLineItemQuantity.getProductId()).setQuantity(changeLineItemQuantity.getQuantity()).build();
   }
 
   private static RemoveLineItem toApi(ShoppingCartVeActionTopicIn.RemoveLineItem removeLineItem) {
-    return ShoppingCartVeApi.RemoveLineItem
-        .newBuilder()
-        .setCartId(removeLineItem.getCartId())
-        .setProductId(removeLineItem.getProductId())
-        .build();
+    return ShoppingCartVeApi.RemoveLineItem.newBuilder().setCartId(removeLineItem.getCartId())
+        .setProductId(removeLineItem.getProductId()).build();
   }
 
   private static CheckoutShoppingCart toApi(ShoppingCartVeActionTopicIn.CheckoutShoppingCart checkoutShoppingCart) {
-    return ShoppingCartVeApi.CheckoutShoppingCart
-        .newBuilder()
-        .setCartId(checkoutShoppingCart.getCartId())
-        .build();
+    return ShoppingCartVeApi.CheckoutShoppingCart.newBuilder().setCartId(checkoutShoppingCart.getCartId()).build();
   }
 
   private static RemoveShoppingCart toApi(ShoppingCartVeActionTopicIn.RemoveShoppingCart removeShoppingCart) {
-    return ShoppingCartVeApi.RemoveShoppingCart
-        .newBuilder()
-        .setCartId(removeShoppingCart.getCartId())
-        .build();
+    return ShoppingCartVeApi.RemoveShoppingCart.newBuilder().setCartId(removeShoppingCart.getCartId()).build();
   }
 
   private ServiceCallRef<ShoppingCartVeApi.AddLineItem> addItemRef() {
-    return creationContext.serviceCallFactory()
-        .lookup("cartve.api.CartService", "AddItem", ShoppingCartVeApi.AddLineItem.class);
+    return creationContext.serviceCallFactory().lookup("cartve.api.CartService", "AddItem",
+        ShoppingCartVeApi.AddLineItem.class);
   }
 
   private ServiceCallRef<ShoppingCartVeApi.ChangeLineItemQuantity> changeItemRef() {
-    return creationContext.serviceCallFactory()
-        .lookup("cartve.api.CartService", "ChangeItem", ShoppingCartVeApi.ChangeLineItemQuantity.class);
+    return creationContext.serviceCallFactory().lookup("cartve.api.CartService", "ChangeItem",
+        ShoppingCartVeApi.ChangeLineItemQuantity.class);
   }
 
   private ServiceCallRef<ShoppingCartVeApi.RemoveLineItem> removeItemRef() {
-    return creationContext.serviceCallFactory()
-        .lookup("cartve.api.CartService", "RemoveItem", ShoppingCartVeApi.RemoveLineItem.class);
+    return creationContext.serviceCallFactory().lookup("cartve.api.CartService", "RemoveItem",
+        ShoppingCartVeApi.RemoveLineItem.class);
   }
 
   private ServiceCallRef<ShoppingCartVeApi.CheckoutShoppingCart> checkoutCartRef() {
-    return creationContext.serviceCallFactory()
-        .lookup("cartve.api.CartService", "CheckoutCart", ShoppingCartVeApi.CheckoutShoppingCart.class);
+    return creationContext.serviceCallFactory().lookup("cartve.api.CartService", "CheckoutCart",
+        ShoppingCartVeApi.CheckoutShoppingCart.class);
   }
 
   private ServiceCallRef<ShoppingCartVeApi.RemoveShoppingCart> removeCartRef() {
-    return creationContext.serviceCallFactory()
-        .lookup("cartve.api.CartService", "RemoveCart", ShoppingCartVeApi.RemoveShoppingCart.class);
+    return creationContext.serviceCallFactory().lookup("cartve.api.CartService", "RemoveCart",
+        ShoppingCartVeApi.RemoveShoppingCart.class);
   }
 }

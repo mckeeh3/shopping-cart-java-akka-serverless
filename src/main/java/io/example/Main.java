@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import cartese.action.ShoppingCartEseTopicInAction;
 import cartese.entity.ShoppingCartEse;
 import cartese.view.OrdersByCustomerEseViewImpl;
-import cartve.action.ShoppingCartVeToTopicAction;
+import cartve.action.ShoppingCartVeTopicInAction;
 import cartve.entity.ShoppingCartVe;
 import cartve.view.OrdersByCustomerVeViewImpl;
 
@@ -30,7 +30,7 @@ public final class Main {
       OrdersByCustomerEseViewImpl::new,
       OrdersByCustomerVeViewImpl::new,
       ShoppingCartEseTopicInAction::new,
-      ShoppingCartVeToTopicAction::new);
+      ShoppingCartVeTopicInAction::new);
   }
 
   public static void main(String[] args) throws Exception {
