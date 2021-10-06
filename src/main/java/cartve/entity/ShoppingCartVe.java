@@ -13,12 +13,6 @@ import com.akkaserverless.javasdk.valueentity.ValueEntityContext;
 import com.google.protobuf.Empty;
 
 import cartve.api.ShoppingCartVeApi;
-import cartve.api.ShoppingCartVeApi.AddLineItem;
-import cartve.api.ShoppingCartVeApi.ChangeLineItemQuantity;
-import cartve.api.ShoppingCartVeApi.CheckoutShoppingCart;
-import cartve.api.ShoppingCartVeApi.RemoveLineItem;
-import cartve.api.ShoppingCartVeApi.RemoveShoppingCart;
-import cartve.entity.ShoppingCartVeEntity.Cart;
 
 public class ShoppingCartVe extends AbstractShoppingCartVe {
   private final String entityId;
@@ -65,7 +59,7 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
     return reject(currentState, command).orElse(handle(currentState, command));
   }
 
-  private Optional<Effect<Empty>> reject(Cart currentState, AddLineItem command) {
+  private Optional<Effect<Empty>> reject(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.AddLineItem command) {
     var rejected = rejectCheckedOutOrDeleted(currentState);
     if (rejected.isPresent()) {
       return rejected;
@@ -82,7 +76,7 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
     return Optional.empty();
   }
 
-  private Optional<Effect<Empty>> reject(Cart currentState, ChangeLineItemQuantity command) {
+  private Optional<Effect<Empty>> reject(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.ChangeLineItemQuantity command) {
     var rejected = rejectCheckedOutOrDeleted(currentState);
     if (rejected.isPresent()) {
       return rejected;
@@ -96,7 +90,7 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
     return Optional.empty();
   }
 
-  private Optional<Effect<Empty>> reject(Cart currentState, RemoveLineItem command) {
+  private Optional<Effect<Empty>> reject(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.RemoveLineItem command) {
     var rejected = rejectCheckedOutOrDeleted(currentState);
     if (rejected.isPresent()) {
       return rejected;
@@ -107,7 +101,7 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
     return Optional.empty();
   }
 
-  private Optional<Effect<Empty>> reject(Cart currentState, CheckoutShoppingCart command) {
+  private Optional<Effect<Empty>> reject(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.CheckoutShoppingCart command) {
     if (currentState.getDeleted()) {
       return Optional.of(effects().error("Shopping cart has been deleted"));
     }
@@ -117,14 +111,14 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
     return Optional.empty();
   }
 
-  private Optional<Effect<Empty>> reject(Cart currentState, RemoveShoppingCart command) {
+  private Optional<Effect<Empty>> reject(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.RemoveShoppingCart command) {
     if (currentState.getCheckedOut()) {
       return Optional.of(effects().error("Shopping cart is already checked out"));
     }
     return Optional.empty();
   }
 
-  private Optional<Effect<Empty>> rejectCheckedOutOrDeleted(Cart cart) {
+  private Optional<Effect<Empty>> rejectCheckedOutOrDeleted(ShoppingCartVeEntity.Cart cart) {
     if (cart.getCheckedOut()) {
       return Optional.of(effects().error("Cannot modify a checked out cart"));
     }
@@ -134,55 +128,55 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
     return Optional.empty();
   }
 
-  private Effect<Empty> handle(Cart currentState, AddLineItem command) {
+  private Effect<Empty> handle(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.AddLineItem command) {
     return effects()
         .updateState(
             ShoppingCart
-                .toShoppingCart(currentState)
+                .fromState(currentState)
                 .handle(command)
                 .toState())
         .thenReply(Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(Cart currentState, ChangeLineItemQuantity command) {
+  private Effect<Empty> handle(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.ChangeLineItemQuantity command) {
     return effects()
         .updateState(
             ShoppingCart
-                .toShoppingCart(currentState)
+                .fromState(currentState)
                 .handle(command)
                 .toState())
         .thenReply(Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(Cart currentState, RemoveLineItem command) {
+  private Effect<Empty> handle(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.RemoveLineItem command) {
     return effects()
         .updateState(
             ShoppingCart
-                .toShoppingCart(currentState)
+                .fromState(currentState)
                 .handle(command)
                 .toState())
         .thenReply(Empty.getDefaultInstance());
   }
 
-  private Effect<Empty> handle(Cart currentState, CheckoutShoppingCart command) {
+  private Effect<Empty> handle(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.CheckoutShoppingCart command) {
     return effects()
         .updateState(
             ShoppingCart
-                .toShoppingCart(currentState)
+                .fromState(currentState)
                 .handle(command)
                 .toState())
         .thenReply(Empty.getDefaultInstance());
   }
 
-  private Effect<ShoppingCartVeApi.Cart> handle(Cart currentState) {
+  private Effect<ShoppingCartVeApi.Cart> handle(ShoppingCartVeEntity.Cart currentState) {
     return effects().reply(ShoppingCart.toApi(currentState));
   }
 
-  private Effect<Empty> handle(Cart currentState, RemoveShoppingCart command) {
+  private Effect<Empty> handle(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.RemoveShoppingCart command) {
     return effects()
         .updateState(
             ShoppingCart
-                .toShoppingCart(currentState)
+                .fromState(currentState)
                 .handle(command)
                 .toState())
         .thenReply(Empty.getDefaultInstance());
@@ -211,34 +205,34 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
       }
     }
 
-    ShoppingCart handle(AddLineItem command) {
+    ShoppingCart handle(ShoppingCartVeApi.AddLineItem command) {
       cartId = command.getCartId();
       customerId = command.getCustomerId();
       items.put(command.getProductId(), new LineItem(command.getProductId(), command.getName(), command.getQuantity()));
       return this;
     }
 
-    ShoppingCart handle(ChangeLineItemQuantity command) {
+    ShoppingCart handle(ShoppingCartVeApi.ChangeLineItemQuantity command) {
       items.computeIfPresent(command.getProductId(), (key, value) -> new LineItem(value.productId, value.name, command.getQuantity()));
       return this;
     }
 
-    ShoppingCart handle(RemoveLineItem command) {
+    ShoppingCart handle(ShoppingCartVeApi.RemoveLineItem command) {
       items.remove(command.getProductId());
       return this;
     }
 
-    ShoppingCart handle(CheckoutShoppingCart command) {
+    ShoppingCart handle(ShoppingCartVeApi.CheckoutShoppingCart command) {
       checkedOut = true;
       return this;
     }
 
-    ShoppingCart handle(RemoveShoppingCart command) {
+    ShoppingCart handle(ShoppingCartVeApi.RemoveShoppingCart command) {
       deleted = true;
       return this;
     }
 
-    static ShoppingCart toShoppingCart(Cart cart) {
+    static ShoppingCart fromState(ShoppingCartVeEntity.Cart cart) {
       var shoppingCart = new ShoppingCart();
       shoppingCart.cartId = cart.getCartId();
       shoppingCart.customerId = cart.getCustomerId();
@@ -266,7 +260,7 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
           .build();
     }
 
-    static ShoppingCartVeApi.Cart toApi(Cart cart) {
+    static ShoppingCartVeApi.Cart toApi(ShoppingCartVeEntity.Cart cart) {
       var lineItems = cart.getItemsList().stream().map(item -> ShoppingCartVeApi.LineItem
           .newBuilder()
           .setProductId(item.getProductId())

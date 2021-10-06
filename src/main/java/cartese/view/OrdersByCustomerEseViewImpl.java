@@ -4,14 +4,13 @@
  */
 package cartese.view;
 
-import cartese.entity.ShoppingCartEseEntity;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.akkaserverless.javasdk.view.ViewContext;
+
+import cartese.entity.ShoppingCartEseEntity;
 
 public class OrdersByCustomerEseViewImpl extends AbstractOrdersByCustomerEseView {
 
@@ -26,7 +25,7 @@ public class OrdersByCustomerEseViewImpl extends AbstractOrdersByCustomerEseView
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateItemAdded(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.ItemAdded event) {
     return effects().updateState(
-        ShoppingCart.toShoppingCart(state)
+        ShoppingCart.fromState(state)
             .handle(event)
             .toState());
   }
@@ -34,7 +33,7 @@ public class OrdersByCustomerEseViewImpl extends AbstractOrdersByCustomerEseView
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateItemChangedQuantity(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.ItemChangedQuantity event) {
     return effects().updateState(
-        ShoppingCart.toShoppingCart(state)
+        ShoppingCart.fromState(state)
             .handle(event)
             .toState());
   }
@@ -42,7 +41,7 @@ public class OrdersByCustomerEseViewImpl extends AbstractOrdersByCustomerEseView
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateItemRemoved(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.ItemRemoved event) {
     return effects().updateState(
-        ShoppingCart.toShoppingCart(state)
+        ShoppingCart.fromState(state)
             .handle(event)
             .toState());
   }
@@ -50,7 +49,7 @@ public class OrdersByCustomerEseViewImpl extends AbstractOrdersByCustomerEseView
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateCheckedOut(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.CheckedOut event) {
     return effects().updateState(
-        ShoppingCart.toShoppingCart(state)
+        ShoppingCart.fromState(state)
             .handle(event)
             .toState());
   }
@@ -58,7 +57,7 @@ public class OrdersByCustomerEseViewImpl extends AbstractOrdersByCustomerEseView
   @Override
   public UpdateEffect<ShoppingCartEseEntity.Cart> updateCartRemoved(ShoppingCartEseEntity.Cart state, ShoppingCartEseEntity.CartRemoved event) {
     return effects().updateState(
-        ShoppingCart.toShoppingCart(state)
+        ShoppingCart.fromState(state)
             .handle(event)
             .toState());
   }
@@ -109,17 +108,13 @@ public class OrdersByCustomerEseViewImpl extends AbstractOrdersByCustomerEseView
       return this;
     }
 
-    static ShoppingCart toShoppingCart(Optional<ShoppingCartEseEntity.Cart> state) {
-      return toShoppingCart(state.orElse(ShoppingCartEseEntity.Cart.newBuilder().build()));
-    }
-
-    static ShoppingCart toShoppingCart(ShoppingCartEseEntity.Cart domain) {
+    static ShoppingCart fromState(ShoppingCartEseEntity.Cart state) {
       var cart = new ShoppingCart();
-      cart.cartId = domain.getCartId();
-      cart.customerId = domain.getCustomerId();
-      cart.checkedOut = domain.getCheckedOut();
-      cart.deleted = domain.getDeleted();
-      domain.getItemsList().forEach(item -> cart.items.put(item.getProductId(), toItem(item)));
+      cart.cartId = state.getCartId();
+      cart.customerId = state.getCustomerId();
+      cart.checkedOut = state.getCheckedOut();
+      cart.deleted = state.getDeleted();
+      state.getItemsList().forEach(item -> cart.items.put(item.getProductId(), toItem(item)));
       return cart;
     }
 
