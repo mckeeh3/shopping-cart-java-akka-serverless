@@ -42,4 +42,4 @@ curl -XPUT -H "Content-Type: application/json" {{urlPrefix}}/ese/cart/{{cartId}}
 
 ### cartese.view.OrdersByCustomerEseView.GetOrdersByCustomer
 
-curl -XGET -H "Content-Type: application/json" "{{urlPrefix}}/ese/orders?customer_id={{customerId}}"
+curl -XGET -H "Content-Type: application/json" {{urlPrefix}}/ese/orders?customer_id={{customerId}}

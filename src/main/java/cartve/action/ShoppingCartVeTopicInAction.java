@@ -2,7 +2,6 @@
  * As long as this file exists it will not be re-generated.
  * You are free to make changes to this file.
  */
-
 package cartve.action;
 
 import com.akkaserverless.javasdk.action.ActionCreationContext;
