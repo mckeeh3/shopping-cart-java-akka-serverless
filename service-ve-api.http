@@ -2,7 +2,8 @@
 ### For use with VSCode Rest Client extension
 
 # @urlPrefix = http://localhost:9000
-@urlPrefix = https://sweet-term-7200.us-east1.akkaserverless.app
+
+@urlPrefix = https://black-dream-3128.us-east1.akkaserverless.app
 @customerId = customer-1
 @cartId = cart-1
 @productId = product-1
@@ -11,47 +12,35 @@
 
 ### cartve.CartService.AddItem
 
-curl -XPOST -d '{
-  "cart_id": "{{cartId}}",
+curl -XPOST -H "Content-Type: application/json" -d '{
   "customer_id": "{{customerId}}",
   "product_id": "{{productId}}",
   "name": "{{productName}}",
   "quantity": {{quantity}}
-}' {{urlPrefix}}/ve/cart/{{cartId}}/items/add -H "Content-Type: application/json"
+}' {{urlPrefix}}/ve/cart/{{cartId}}/items/add
 
 ### cartve.CartService.ChangeItem
 
-curl -XPUT -d '{
-  "cart_id": "{{cartId}}",
-  "product_id": "{{productId}}",
+curl -XPUT -H "Content-Type: application/json" -d '{
   "quantity": {{quantity}}
-}' {{urlPrefix}}/ve/cart/{{cartId}}/items/{{productId}}/change -H "Content-Type: application/json"
+}' {{urlPrefix}}/ve/cart/{{cartId}}/items/{{productId}}/change
 
 ### cartve.CartService.CheckoutCart
 
-curl -XPUT -d '{
-  "cart_id": "{{cartId}}"
-}' {{urlPrefix}}/ve/cart/{{cartId}}/checkout -H "Content-Type: application/json"
+curl -XPUT -H "Content-Type: application/json" {{urlPrefix}}/ve/cart/{{cartId}}/checkout
 
 ### cartve.CartService.GetCart
 
-curl -XGET -d '{
-  "cart_id": "{{cartId}}"
-}' {{urlPrefix}}/ve/carts/{{cartId}} -H "Content-Type: application/json"
+curl -XGET -H "Content-Type: application/json" {{urlPrefix}}/ve/carts/{{cartId}}
 
 ### cartve.CartService.RemoveCart
 
-curl -XPUT -d '{
-  "cart_id": "{{cartId}}"
-}' {{urlPrefix}}/ve/carts/{{cartId}}/remove -H "Content-Type: application/json"
+curl -XPUT -H "Content-Type: application/json" {{urlPrefix}}/ve/carts/{{cartId}}/remove
 
 ### cartve.CartService.RemoveItem
 
-curl -XPUT -d '{
-  "cart_id": "{{cartId}}",
-  "product_id": "{{productId}}"
-}' {{urlPrefix}}/ve/cart/{{cartId}}/items/{{productId}}/remove -H "Content-Type: application/json"
+curl -XPUT -H "Content-Type: application/json" {{urlPrefix}}/ve/cart/{{cartId}}/items/{{productId}}/remove
 
-### cartese.view.OrdersByCustomerEseView.GetOrdersByCustomer
+### cartve.view.OrdersByCustomerEseView.GetOrdersByCustomer
 
-curl -XGET "{{urlPrefix}}/ve/orders?customer_id={{customerId}}"
+curl -XGET -H "Content-Type: application/json" "{{urlPrefix}}/ve/orders?customer_id={{customerId}}"

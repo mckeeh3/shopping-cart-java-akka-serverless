@@ -4,14 +4,14 @@
 
   <groupId>io.example</groupId>
   <artifactId>shopping-cart</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>v1</version>
   <packaging>jar</packaging>
 
   <name>shopping-cart-java-akka-serverless</name>
     <properties>
 
     <!-- TODO Update to your own Docker repository or Docker Hub scope -->
-    <dockerImage>${project.artifactId}</dockerImage>
+    <dockerImage>mckeeh3/${project.artifactId}</dockerImage>
     <dockerTag>${project.version}</dockerTag>
     <mainClass>io.example.Main</mainClass>
 
