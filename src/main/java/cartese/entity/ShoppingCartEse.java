@@ -13,6 +13,7 @@ import com.akkaserverless.javasdk.eventsourcedentity.EventSourcedEntityContext;
 import com.google.protobuf.Empty;
 
 import cartese.api.ShoppingCartEseApi;
+import cartese.entity.ShoppingCartEseEntity.Cart;
 
 public class ShoppingCartEse extends AbstractShoppingCartEse {
   private final String entityId;
@@ -221,7 +222,7 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
   }
 
   private Effect<ShoppingCartEseApi.Cart> handle(ShoppingCartEseEntity.Cart currentState) {
-    return effects().reply(ShoppingCart.toApi(currentState));
+    return effects().reply(toApi(currentState));
   }
 
   private Effect<Empty> handle(ShoppingCartEseEntity.Cart currentState, ShoppingCartEseApi.RemoveShoppingCart command) {
@@ -234,98 +235,100 @@ public class ShoppingCartEse extends AbstractShoppingCartEse {
         .thenReply(newState -> Empty.getDefaultInstance());
   }
 
+  static ShoppingCartEseApi.Cart toApi(ShoppingCartEseEntity.Cart state) {
+    var lineItems = state.getItemsList().stream().map(item -> ShoppingCartEseApi.LineItem
+        .newBuilder()
+        .setProductId(item.getProductId())
+        .setName(item.getName())
+        .setQuantity(item.getQuantity())
+        .build())
+        .collect(Collectors.toList());
+    return ShoppingCartEseApi.Cart
+        .newBuilder()
+        .setCustomerId(state.getCustomerId())
+        .setCheckedOut(state.getCheckedOut())
+        .setDeleted(state.getDeleted())
+        .addAllItems(lineItems)
+        .build();
+  }
+
   static class ShoppingCart {
-    String cartId;
-    String customerId;
-    boolean checkedOut;
-    boolean deleted;
-    Map<String, LineItem> items = new LinkedHashMap<>();
+    private Cart state;
+    Map<String, ShoppingCartEseEntity.LineItem> lineItems = new LinkedHashMap<>();
 
-    static class LineItem {
-      String productId;
-      String name;
-      int quantity;
-
-      LineItem(String productId, String name, int quantity) {
-        this.productId = productId;
-        this.name = name;
-        this.quantity = quantity;
-      }
-
-      static LineItem toLineItem(ShoppingCartEseEntity.LineItem item) {
-        return new LineItem(item.getProductId(), item.getName(), item.getQuantity());
-      }
+    ShoppingCart(Cart cart) {
+      this.state = cart;
+      state.getItemsList().forEach(item -> lineItems.put(item.getProductId(), item));
     }
 
     ShoppingCart handle(ShoppingCartEseEntity.ItemAdded event) {
-      cartId = event.getCartId();
-      customerId = event.getCustomerId();
-      items.put(event.getItem().getProductId(), LineItem.toLineItem(event.getItem()));
+      lineItems.computeIfPresent(event.getItem().getProductId(),
+          (productId, lineItem) -> lineItem
+              .toBuilder()
+              .setQuantity(lineItem.getQuantity() + event.getItem().getQuantity())
+              .build());
+      lineItems.computeIfAbsent(event.getItem().getProductId(),
+          productId -> ShoppingCartEseEntity.LineItem
+              .newBuilder()
+              .setProductId(event.getItem().getProductId())
+              .setName(event.getItem().getName())
+              .setQuantity(event.getItem().getQuantity())
+              .build());
+      state = state.toBuilder()
+          .setCartId(event.getCartId())
+          .setCustomerId(event.getCustomerId())
+          .clearItems()
+          .addAllItems(lineItems.values())
+          .build();
       return this;
     }
 
     ShoppingCart handle(ShoppingCartEseEntity.ItemChangedQuantity event) {
-      items.computeIfPresent(event.getProductId(), (key, value) -> new LineItem(key, value.name, event.getQuantity()));
+      lineItems.computeIfPresent(event.getProductId(), (productId, item) -> item
+          .toBuilder()
+          .setQuantity(event.getQuantity())
+          .build());
+      state = state.toBuilder()
+          .clearItems()
+          .addAllItems(lineItems.values())
+          .build();
       return this;
     }
 
     ShoppingCart handle(ShoppingCartEseEntity.ItemRemoved event) {
-      items.remove(event.getProductId());
+      lineItems.remove(event.getProductId());
+      state = state.toBuilder()
+          .clearItems()
+          .addAllItems(lineItems.values())
+          .build();
       return this;
     }
 
     ShoppingCart handle(ShoppingCartEseEntity.CheckedOut event) {
-      checkedOut = true;
+      state = state
+          .toBuilder()
+          .setCheckedOut(true)
+          .build();
       return this;
     }
 
     ShoppingCart handle(ShoppingCartEseEntity.CartRemoved event) {
-      deleted = true;
+      state = state
+          .toBuilder()
+          .setDeleted(true)
+          .build();
       return this;
     }
 
-    static ShoppingCart fromState(ShoppingCartEseEntity.Cart cart) {
-      var shoppingCart = new ShoppingCart();
-      shoppingCart.cartId = cart.getCartId();
-      shoppingCart.customerId = cart.getCustomerId();
-      shoppingCart.checkedOut = cart.getCheckedOut();
-      shoppingCart.deleted = cart.getDeleted();
-      cart.getItemsList().forEach(item -> shoppingCart.items.put(item.getProductId(), LineItem.toLineItem(item)));
-      return shoppingCart;
+    static ShoppingCart fromState(ShoppingCartEseEntity.Cart state) {
+      return new ShoppingCart(state);
     }
 
     ShoppingCartEseEntity.Cart toState() {
-      var lineItems = items.values().stream().map(item -> ShoppingCartEseEntity.LineItem
-          .newBuilder()
-          .setProductId(item.productId)
-          .setName(item.name)
-          .setQuantity(item.quantity)
-          .build())
-          .collect(Collectors.toList());
-      return ShoppingCartEseEntity.Cart
-          .newBuilder()
-          .setCartId(cartId)
-          .setCustomerId(customerId)
-          .setCheckedOut(checkedOut)
-          .setDeleted(deleted)
-          .addAllItems(lineItems)
-          .build();
-    }
-
-    static ShoppingCartEseApi.Cart toApi(ShoppingCartEseEntity.Cart cart) {
-      var lineItems = cart.getItemsList().stream().map(item -> ShoppingCartEseApi.LineItem
-          .newBuilder()
-          .setProductId(item.getProductId())
-          .setName(item.getName())
-          .setQuantity(item.getQuantity())
-          .build())
-          .collect(Collectors.toList());
-      return ShoppingCartEseApi.Cart
-          .newBuilder()
-          .setCustomerId(cart.getCustomerId())
-          .setCheckedOut(cart.getCheckedOut())
-          .setDeleted(cart.getDeleted())
-          .addAllItems(lineItems)
+      return state
+          .toBuilder()
+          .clearItems()
+          .addAllItems(lineItems.values())
           .build();
     }
   }
