@@ -31,22 +31,22 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
 
   @Override
   public Effect<Empty> addItem(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.AddLineItem command) {
-    return reject(currentState, command).orElse(handle(currentState, command));
+    return reject(currentState, command).orElseGet(() -> handle(currentState, command));
   }
 
   @Override
   public Effect<Empty> changeItem(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.ChangeLineItemQuantity command) {
-    return reject(currentState, command).orElse(handle(currentState, command));
+    return reject(currentState, command).orElseGet(() -> handle(currentState, command));
   }
 
   @Override
   public Effect<Empty> removeItem(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.RemoveLineItem command) {
-    return reject(currentState, command).orElse(handle(currentState, command));
+    return reject(currentState, command).orElseGet(() -> handle(currentState, command));
   }
 
   @Override
   public Effect<Empty> checkoutCart(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.CheckoutShoppingCart command) {
-    return reject(currentState, command).orElse(handle(currentState, command));
+    return reject(currentState, command).orElseGet(() -> handle(currentState, command));
   }
 
   @Override
@@ -56,7 +56,7 @@ public class ShoppingCartVe extends AbstractShoppingCartVe {
 
   @Override
   public Effect<Empty> removeCart(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.RemoveShoppingCart command) {
-    return reject(currentState, command).orElse(handle(currentState, command));
+    return reject(currentState, command).orElseGet(() -> handle(currentState, command));
   }
 
   private Optional<Effect<Empty>> reject(ShoppingCartVeEntity.Cart currentState, ShoppingCartVeApi.AddLineItem command) {
