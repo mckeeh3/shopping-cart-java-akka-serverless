@@ -44,7 +44,7 @@ service ShoppingCartEseTopicIn {
     option (akkaserverless.method).eventing.in = {
       topic: "ese-shopping-cart"
     };
-}
+  }
 
   rpc ChangeItem(ChangeLineItemQuantity) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
@@ -64,7 +64,7 @@ service ShoppingCartEseTopicIn {
     };
   }
 
-  rpc RemoveCart (RemoveShoppingCart) returns (google.protobuf.Empty) {
+  rpc RemoveCart(RemoveShoppingCart) returns (google.protobuf.Empty) {
     option (akkaserverless.method).eventing.in = {
       topic: "ese-shopping-cart"
     };

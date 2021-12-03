@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package cartese.api; // <==== for Event Sourced Entity API
+package cartese.api;  // <==== for Event Sourced Entity API
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -55,7 +55,7 @@ message Cart {
 service CartService {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_ENTITY
-    component: "cartese.entity.ShoppingCartEse" // <==== for Event Sourced Entity API
+    component: "cartese.entity.ShoppingCartEse"  // <==== for Event Sourced Entity API
   };
 
   rpc AddItem(AddLineItem) returns (google.protobuf.Empty) {
@@ -83,14 +83,11 @@ service CartService {
   rpc GetCart(GetShoppingCart) returns (Cart) {
     option (google.api.http) = {
       get: "/ese/carts/{cart_id}"
-      additional_bindings: {
-        get: "/ese/carts/{cart_id}/items"
-        response_body: "items"
-      }
+      additional_bindings: { get: "/ese/carts/{cart_id}/items" response_body: "items" }
     };
   }
 
-  rpc RemoveCart (RemoveShoppingCart) returns (google.protobuf.Empty) {
+  rpc RemoveCart(RemoveShoppingCart) returns (google.protobuf.Empty) {
     option (google.api.http).put = "/ese/carts/{cart_id}/remove";
   }
 }

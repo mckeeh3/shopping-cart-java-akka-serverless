@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package cartve.api; // <==== for Value Entity API
+package cartve.api;  // <==== for Value Entity API
 
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
@@ -53,7 +53,7 @@ message Cart {
 service CartService {
   option (akkaserverless.service) = {
     type: SERVICE_TYPE_ENTITY
-    component: "cartve.entity.ShoppingCartVe" // <==== for Value Entity API
+    component: "cartve.entity.ShoppingCartVe"  // <==== for Value Entity API
   };
 
   rpc AddItem(AddLineItem) returns (google.protobuf.Empty) {
@@ -81,14 +81,11 @@ service CartService {
   rpc GetCart(GetShoppingCart) returns (Cart) {
     option (google.api.http) = {
       get: "/ve/carts/{cart_id}"
-      additional_bindings: {
-        get: "/ve/carts/{cart_id}/items"
-        response_body: "items"
-      }
+      additional_bindings: { get: "/ve/carts/{cart_id}/items" response_body: "items" }
     };
   }
 
-  rpc RemoveCart (RemoveShoppingCart) returns (google.protobuf.Empty) {
+  rpc RemoveCart(RemoveShoppingCart) returns (google.protobuf.Empty) {
     option (google.api.http).put = "/ve/carts/{cart_id}/remove";
   }
 }
